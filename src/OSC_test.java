@@ -16,7 +16,7 @@ public class OSC_test {
 	    // Bring the IP Address and port together to form our OSC Sender
 	    OSCPortOut sender = new OSCPortOut(remoteIP, remotePort);
 	    
-	    // The address to send our message to
+	    // The address to which we send our message
 	    String address1 = "/note";
 	    
 	    // An array of objects that are our values we would like to send
@@ -30,6 +30,7 @@ public class OSC_test {
 	    // Send each message
 	    System.out.printf("Sending message1 to %s:%s at %s\n", remoteIP, remotePort, message1.getAddress());
 	    sender.send(message1);
+	    
 	  }
 	}
 	
