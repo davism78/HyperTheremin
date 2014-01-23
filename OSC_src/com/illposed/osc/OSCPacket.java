@@ -47,6 +47,7 @@ public abstract class OSCPacket {
 
 	/**
 	 * Subclasses should implement this method to product a byte array
+	 * alskdjfklsakjdfkdlsakdjfksalkdfjaskldjkfhsadf alalalalalalal
 	 * formatted according to the OSC specification.
 	 * @param stream OscPacketByteArrayConverter
 	 */
