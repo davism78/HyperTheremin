@@ -8,6 +8,8 @@ import com.illposed.osc.*;
 import java.net.*;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class ThereminListener extends Listener {
 	private static final double SCALE = 30.0;
@@ -17,7 +19,7 @@ public class ThereminListener extends Listener {
 	//net stuff
 	private InetAddress remoteIP;
     private int remotePort = 8000;
-    String address1 = "/note";
+    String addressPitch = "/note";
     OSCPortOut sender;
 
 	
@@ -74,19 +76,32 @@ public class ThereminListener extends Listener {
             	float Yval = v.getY();
             	double tone = CZERO * Math.pow(2, ((Yval - OFFSET) / SCALE));
             	System.out.println(tone);
-            	Object values1[] = new Object[2];
-            	values1[0] = new Float(tone);
-        	    values1[1] = new Integer(75);
-        	    OSCMessage message1 = new OSCMessage(address1, values1);
-        	    try {
-					sender.send(message1);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
+            	
+            	if(!sendPitch(tone, 75)){
+            		System.out.println("ERROR: message did not send");
+            	}
             }
     	}
+    }
+    
+    private boolean sendPitch(double tone, int level){
+    	return sendOSCMessage(addressPitch, new Float(tone), new Integer(level));
+    }
+    
+    private boolean sendOSCMessage(String address, Object value1, Object value2){
+    	if(value1 == null || value2 == null)
+    		return false;
+    	Collection<Object> values = new ArrayList<Object>();
+    	values.add(value1);
+	    values.add(value2);
+	    OSCMessage message = new OSCMessage(address, values);
+	    try {
+			sender.send(message);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			return false;
+		}
+    	return true;
     }
 }
 
