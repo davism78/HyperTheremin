@@ -11,6 +11,10 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+
 public class ThereminListener extends Listener {
 	private static final double SCALE = 30.0;
 	private static final double OFFSET = 25.0;
@@ -106,14 +110,18 @@ public class ThereminListener extends Listener {
 }
 
 class Theremin {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws LWJGLException {
         // Create a sample listener and controller
         ThereminListener listener = new ThereminListener();
         Controller controller = new Controller();
 
         // Have the sample listener receive events from the controller
         controller.addListener(listener);
-
+        
+        //LWJGL
+        Display.setDisplayMode(new DisplayMode(400, 400));
+        Display.create();
+        
         // Keep this process running until Enter is pressed
         System.out.println("Press Enter to quit...");
         try {
@@ -124,6 +132,7 @@ class Theremin {
 
         // Remove the sample listener when done
         controller.removeListener(listener);
+        Display.destroy();
     }
 
 }

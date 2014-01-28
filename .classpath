@@ -4,10 +4,23 @@
 	<classpathentry kind="src" path="pd_src"/>
 	<classpathentry kind="src" path="OSC_src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre7"/>
-	<classpathentry kind="lib" path="lib/LeapJava.jar">
+	<classpathentry kind="lib" path="lib/LeapLib/LeapJava.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="HyperTheremin/lib/x64"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="HyperTheremin/lib/LeapLib/NativeLib/x64"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/LWJGLLib/jar/AppleJavaExtensions.jar"/>
+	<classpathentry kind="lib" path="lib/LWJGLLib/jar/asm-debug-all.jar"/>
+	<classpathentry kind="lib" path="lib/LWJGLLib/jar/jinput.jar"/>
+	<classpathentry kind="lib" path="lib/LWJGLLib/jar/lwjgl_test.jar"/>
+	<classpathentry kind="lib" path="lib/LWJGLLib/jar/lwjgl_util_applet.jar"/>
+	<classpathentry kind="lib" path="lib/LWJGLLib/jar/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="lib/LWJGLLib/jar/lwjgl-debug.jar"/>
+	<classpathentry kind="lib" path="lib/LWJGLLib/jar/lwjgl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="HyperTheremin/lib/LWJGLLib/NativeLib/windows"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/LWJGLLib/jar/lzma.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
