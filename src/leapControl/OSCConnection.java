@@ -13,13 +13,13 @@ import com.illposed.osc.OSCPortOut;
 public class OSCConnection {
 
 	private InetAddress remoteIP;
-	private int remotePort = 8000;
-	private String addressPitch = "/note";
+	private int remotePort;
+	private String nodeName;
 	private OSCPortOut sender;
 
 	public OSCConnection(int port, String name) {
 		remotePort = port;
-		addressPitch = name;
+		nodeName = name;
 		// The IP Address of the server (or listener) we would like to send to
 	    // For testing we will use the `getLocalHost` function to send to our
 	    // machine, but for using with different physical devices, use something
@@ -45,7 +45,7 @@ public class OSCConnection {
 	
 	
 	public boolean sendPitch(double tone, int level){
-		return sendOSCMessage(addressPitch, new Float(tone), new Integer(level));
+		return sendOSCMessage(nodeName, new Float(tone), new Integer(level));
 	}
 
 	private boolean sendOSCMessage(String address, Object value1, Object value2){
