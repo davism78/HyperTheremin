@@ -1,4 +1,4 @@
-#N canvas 320 76 696 481 10;
+#N canvas 320 76 1056 841 10;
 #X declare -lib oscx -lib osc -lib mrpeach;
 #X msg 131 153 connect localhost 30200;
 #X msg 130 183 disconnect;
@@ -11,7 +11,6 @@
 #X obj 493 311 dbtorms;
 #X obj 442 358 *~ 0.5;
 #X obj 475 30 import oscx osc mrpeach;
-#X obj 438 163 udpreceive 30200;
 #X text 552 310 set volume;
 #X text 363 311 set volume;
 #X obj 8 166 packOSC;
@@ -25,10 +24,10 @@
 #X obj 437 262 unpack f f;
 #X obj 525 341 print rms;
 #X obj 557 288 print db;
-#X obj 5 -10 hsl 128 15 100 1000 0 0 empty empty empty -2 -8 0 10 -262144
--1 -1 2300 1;
+#X obj 11 -9 hsl 128 15 100 1000 0 0 empty empty empty -2 -8 0 10 -262144
+-1 -1 9200 1;
 #X obj 170 -10 hsl 128 15 0 100 0 0 empty empty empty -2 -8 0 10 -262144
--1 -1 1700 1;
+-1 -1 7600 1;
 #X floatatom 2 54 5 0 0 0 - - -;
 #X floatatom 167 20 5 0 0 0 - - -;
 #X text 35 -29 frequency;
@@ -38,31 +37,32 @@
 #X obj 7 93 list append 1 2;
 #X msg 90 40 bang;
 #X msg 7 130 send /note \$1 \$2;
-#X connect 0 0 15 0;
-#X connect 1 0 15 0;
+#X obj 438 163 udpreceive 8000;
+#X connect 0 0 14 0;
+#X connect 1 0 14 0;
 #X connect 2 0 9 0;
 #X connect 6 0 10 0;
-#X connect 7 0 18 0;
-#X connect 7 0 20 0;
+#X connect 7 0 17 0;
+#X connect 7 0 19 0;
 #X connect 8 0 9 1;
-#X connect 8 0 22 0;
+#X connect 8 0 21 0;
 #X connect 9 0 3 0;
 #X connect 9 0 3 1;
 #X connect 10 0 4 0;
 #X connect 10 0 5 0;
-#X connect 11 0 7 0;
+#X connect 13 0 14 0;
 #X connect 14 0 15 0;
-#X connect 15 0 16 0;
-#X connect 20 0 21 0;
-#X connect 21 0 19 0;
-#X connect 21 0 2 0;
-#X connect 21 1 8 0;
-#X connect 21 1 23 0;
+#X connect 19 0 20 0;
+#X connect 20 0 18 0;
+#X connect 20 0 2 0;
+#X connect 20 1 8 0;
+#X connect 20 1 22 0;
+#X connect 23 0 25 0;
 #X connect 24 0 26 0;
-#X connect 25 0 27 0;
+#X connect 25 0 31 0;
+#X connect 26 0 31 1;
 #X connect 26 0 32 0;
-#X connect 27 0 32 1;
-#X connect 27 0 33 0;
-#X connect 32 0 34 0;
-#X connect 33 0 26 0;
-#X connect 34 0 14 0;
+#X connect 31 0 33 0;
+#X connect 32 0 25 0;
+#X connect 33 0 13 0;
+#X connect 34 0 7 0;
