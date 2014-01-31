@@ -1,6 +1,4 @@
 
-import java.io.IOException;
-
 import leapControl.ThereminListener;
 
 import org.lwjgl.LWJGLException;
@@ -22,16 +20,9 @@ class Theremin {
         //LWJGL
         Display.setDisplayMode(new DisplayMode(400, 400));
         Display.create();
-        
-        // Keep this process running until Enter is pressed
-        System.out.println("Press Enter to quit...");
-        try {
-            System.in.read();
-        } catch (IOException e) {
-            e.printStackTrace();
+        while(!Display.isCloseRequested()) {
+        	Display.update();
         }
-
-        // Remove the sample listener when done
         controller.removeListener(listener);
         Display.destroy();
     }
