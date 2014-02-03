@@ -11,14 +11,14 @@ public class GraphicsModel {
 	private static final boolean FULL_SCREEN = false;
 	private static final int WIN_HEIGHT = 600;
 	private static final int WIN_WIDTH = 800;
-	
+
 	private boolean isCreated;
-	
+
 	public GraphicsModel() {
 		setupDisplay();
-		
+
 	}
-	
+
 	/**
 	 * Sets up the display to the default dimensions
 	 */
@@ -32,19 +32,22 @@ public class GraphicsModel {
 			isCreated = true;
 			glClearColor(0.0F, 0.0F, 0.0F, 0.0F);
 			resize();
+
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			glOrtho(0, Display.getWidth(), Display.getHeight(), 0, 1, -1);
+			glMatrixMode(GL_MODELVIEW);
 			
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * resizes the viewport on the Display to match the dimensions of the Display.
 	 */
 	private void resize() {
 		glViewport(0, 0, Display.getWidth(), Display.getHeight());
-		
-		
 	}
 
 	/**
@@ -53,19 +56,37 @@ public class GraphicsModel {
 	 */
 	public void runDisplay() {
 		while(!Display.isCloseRequested()) {
-			
+
 			if(Display.wasResized()) {
 				resize();
 			}
-			
-			// Clears the screen
-			glClear(GL_COLOR_BUFFER_BIT);
-			
-        	Display.update();
-        	Display.sync(60);
-        }
+
+			render();
+
+			Display.update();
+			Display.sync(60);
+		}
 	}
-	
+
+	private void render() {
+		// Clears the screen
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		glLoadIdentity();
+		glColor3f(0, 0, 1); // set color to blue
+		
+		glBegin(GL_TRIANGLES); // draw triangle
+		glVertex2f(100, 100);
+		glVertex2f(150, 100);
+		glVertex2f(100, 150);
+		
+		glEnd();
+
+
+
+
+	}
+
 	/**
 	 * Cleans up the Display used in the Application.
 	 */
@@ -75,5 +96,5 @@ public class GraphicsModel {
 			isCreated = false;
 		}
 	}
-	
+
 }
