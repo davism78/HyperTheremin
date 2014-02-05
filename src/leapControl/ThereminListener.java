@@ -34,10 +34,16 @@ public class ThereminListener extends Listener {
     /*
      * Evaluate fingers position into a double value representing a pitch
      */
-    private double getTone(Finger finger) {
-       	Vector v = finger.tipPosition();
-       	float Yval = v.getY();
-       	double tone = CZERO * Math.pow(2, ((Yval - OFFSET) / SCALE));
+    private double getTone(FingerList fingers) {
+    	float max = fingers.get(0).tipPosition().getX();
+       	for (Finger finger : fingers){
+       		float v = finger.tipPosition().getX();
+       		if (v > max){
+       			max = v;
+       		}
+       	}
+    	
+       	double tone = CZERO * Math.pow(2, ((max - OFFSET) / SCALE));
        	return tone;
     }
     
@@ -45,13 +51,13 @@ public class ThereminListener extends Listener {
      * Evaluate a fingers position into an int value representing volume level
      * 
      * TODO this method need much more thought out implementation
+     * TODO filter out crackling when changing level
      */
-    private int getLevel(Finger finger) {
+    private double getLevel(Finger finger) {
        	Vector v = finger.tipPosition();
        	float Yval = v.getY();
-       	int level = (int)Yval;
-       	if (Yval > 100.0)
-       		return 100;
+       	System.out.println("Y VAL: " + Yval);
+       	double level = 17 * Math.log(Yval);
        	return level;
     }
     
@@ -63,36 +69,26 @@ public class ThereminListener extends Listener {
      */
     public void onFrame(Controller controller) {
     	Frame frame = controller.frame();
-    	int level = 0;
+    	double level = 0;
     	double tone = 0;
     	
     	System.out.println("#Hands: " + frame.hands().count());
     	// Process hands
-    	switch (frame.hands().count()) {
-    	case 0:
-    		break;
-    	case 1:
-    		// Use constant level
-    		level = 75;
-    		Hand hand = frame.hands().get(0);
-    		FingerList fingers = hand.fingers();
-    		if (!fingers.isEmpty()){
-    			// should be a loop over all fingers
-    			tone = getTone(fingers.get(0));
+
+    	if (frame.hands().count() >= 1){
+    		// get pitch data
+    		FingerList tones = frame.hands().get(0).fingers();
+    		if (!tones.isEmpty()){
+    			tone = getTone(tones);
     		}
-    		break;
-    	default:  // TODO handle more than two hands
-    		FingerList levels = frame.hands().get(0).fingers();
-    		FingerList tones = frame.hands().get(1).fingers();
+    	}
+    	
+    	if (frame.hands().count() >= 2){
+    		// get volume data
+    		FingerList levels = frame.hands().get(frame.hands().count() - 1).fingers();
     		if (!levels.isEmpty()){
-    			//TODO level should be determined by overall hand position, not based on finger
     			level = getLevel(levels.get(0));
     		}
-    		if (!tones.isEmpty()){
-    			//TODO should be a loop over all fingers
-    			tone = getTone(tones.get(0));
-    		}
-    		break;
     	}
 
     	System.out.println(tone);

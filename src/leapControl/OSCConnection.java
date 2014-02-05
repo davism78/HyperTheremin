@@ -42,10 +42,17 @@ public class OSCConnection {
 		
         System.out.println("Initialized");
 	}
+
 	
-	
-	public boolean sendPitch(double tone, int level){
-		return sendOSCMessage(nodeName, new Float(tone), new Integer(level));
+	public boolean sendPitch(double tone, double level){
+		// Check for maximum allowed values
+		if (level > 100.0){
+       		level = 100.0;
+		}
+		if (tone > 20000.0) {
+			tone = 20000.0;
+		}
+		return sendOSCMessage(nodeName, new Float(tone), new Float(level));
 	}
 
 	private boolean sendOSCMessage(String address, Object value1, Object value2){
