@@ -18,6 +18,7 @@ class Theremin {
 		controller.addListener(listener);
 
 		// run the graphics
+		graphics.setVal(1.3e10);
 		graphics.runDisplay();
 
 		// cleanup
