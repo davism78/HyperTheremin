@@ -49,8 +49,8 @@ public class OSCConnection {
 		if (level > 100.0){
        		level = 100.0;
 		}
-		if (tone > 20000.0) {
-			tone = 20000.0;
+		if (tone > 18000.0) {
+			tone = 18000.0;
 		}
 		return sendOSCMessage(nodeName, new Float(tone), new Float(level));
 	}

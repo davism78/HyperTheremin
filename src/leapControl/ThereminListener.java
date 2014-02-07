@@ -9,10 +9,13 @@ import com.leapmotion.leap.Listener;
 import com.leapmotion.leap.Vector;
 
 public class ThereminListener extends Listener {
-	private static final double SCALE = 30.0;
-	private static final double OFFSET = 25.0;
-	private static final double CZERO = 16.25;
+	private static final double SCALE = 40.0;   // arbitrary
+	private static final double OFFSET = 25.0; // Leap motion min sensitivity 
+	private static final double MAXFREQ = 20000.0; // freq when touching antennae
+	
+	private static final double ANTENNAE = 350.0;  //the distance of the virtual antennae from the origin
 	private OSCConnection pitchConnection;
+	
 	
     public void onInit(Controller controller) {
     	pitchConnection = new OSCConnection(8000, "/note");
@@ -33,6 +36,11 @@ public class ThereminListener extends Listener {
     
     /*
      * Evaluate fingers position into a double value representing a pitch
+     * Pitch is determined by distance from virtual antennae which is calculated here
+     * The virtual antennae location is specified by ANTENNAE
+     * 
+     * TODO: this method doesn't work well with multiple fingers
+     * 		 desired function would be to base tone on closest point on the entire hand
      */
     private double getTone(FingerList fingers) {
     	float max = fingers.get(0).tipPosition().getX();
@@ -42,30 +50,42 @@ public class ThereminListener extends Listener {
        			max = v;
        		}
        	}
-    	
-       	double tone = CZERO * Math.pow(2, ((max - OFFSET) / SCALE));
+       	
+       	// Finds the distance of the finger from the "antennae"
+       	double position = Math.abs(ANTENNAE - (double) max);
+    	 
+       	// Pitch formula = MAX * (1/2)^(pos / SCALE)
+       	// This formula pins the maximum frequency to be at the location of ANTENNAE 
+       	// SCALE is used to tune the pitch scale
+       	double tone = MAXFREQ * Math.pow(.5,  position / SCALE);
+
        	return tone;
     }
     
     /*
-     * Evaluate a fingers position into an int value representing volume level
+     * Evaluate a fingers position into an double value representing volume level
      * 
-     * TODO this method need much more thought out implementation
      * TODO filter out crackling when changing level
      */
     private double getLevel(Finger finger) {
        	Vector v = finger.tipPosition();
        	float Yval = v.getY();
        	System.out.println("Y VAL: " + Yval);
-       	double level = 17 * Math.log(Yval);
+       	
+       	// Volume formula  = C * log(height - offset)
+       	// The formula should pin the height of OFFSET to 0 db
+       	// Levels beyond 0 are computed logarithmically and scaled with a constant
+       	double level = 17 * Math.log(Yval - OFFSET);
+       	
        	return level;
     }
     
     /*
      * This method is intended to transform a finger point position into an
      * audio frequency that can be used as input to an oscillator.
-     * (non-Javadoc)
-     * @see com.leapmotion.leap.Listener#onFrame(com.leapmotion.leap.Controller)
+     * 
+     * TODO when removing hand from frame, controller can get confused
+     * 		also if you put left hand it first, it will not map it to volume when you put in right hand
      */
     public void onFrame(Controller controller) {
     	Frame frame = controller.frame();
@@ -92,6 +112,8 @@ public class ThereminListener extends Listener {
     	}
 
     	System.out.println(tone);
+    	
+    	// Send Data to PureData
     	if(!pitchConnection.sendPitch(tone, level)){
     		System.out.println("ERROR: message did not send");
     	}  
