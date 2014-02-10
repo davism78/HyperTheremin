@@ -1,10 +1,11 @@
 package leapControl;
 
+import graphics.GraphicsModel;
+
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Finger;
 import com.leapmotion.leap.FingerList;
 import com.leapmotion.leap.Frame;
-import com.leapmotion.leap.Hand;
 import com.leapmotion.leap.Listener;
 import com.leapmotion.leap.Vector;
 
@@ -12,7 +13,13 @@ public class ThereminListener extends Listener {
 	private static final double SCALE = 30.0;
 	private static final double OFFSET = 25.0;
 	private static final double CZERO = 16.25;
+	
 	private OSCConnection pitchConnection;
+	private GraphicsModel graphicsModel;
+	
+	public ThereminListener(GraphicsModel model) {
+		this.graphicsModel = model;
+	}
 	
     public void onInit(Controller controller) {
     	pitchConnection = new OSCConnection(8000, "/note");
@@ -92,6 +99,11 @@ public class ThereminListener extends Listener {
     	}
 
     	System.out.println(tone);
+    	
+    	// update the graphics model
+    	graphicsModel.setPitch(tone);
+    	graphicsModel.setVolume(level);
+    	
     	if(!pitchConnection.sendPitch(tone, level)){
     		System.out.println("ERROR: message did not send");
     	}  
