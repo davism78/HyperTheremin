@@ -23,5 +23,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/LWJGLLib/jar/lzma.jar"/>
+	<classpathentry kind="lib" path="lib/LWJGLLib/jar/slick-util.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

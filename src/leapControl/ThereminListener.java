@@ -1,10 +1,11 @@
 package leapControl;
 
+import graphics.GraphicsModel;
+
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Finger;
 import com.leapmotion.leap.FingerList;
 import com.leapmotion.leap.Frame;
-import com.leapmotion.leap.Hand;
 import com.leapmotion.leap.Listener;
 import com.leapmotion.leap.Vector;
 
@@ -14,8 +15,13 @@ public class ThereminListener extends Listener {
 	private static final double MAXFREQ = 20000.0; // freq when touching antennae
 	
 	private static final double ANTENNAE = 350.0;  //the distance of the virtual antennae from the origin
+
 	private OSCConnection pitchConnection;
+	private GraphicsModel graphicsModel;
 	
+	public ThereminListener(GraphicsModel model) {
+		this.graphicsModel = model;
+	}
 	
     public void onInit(Controller controller) {
     	pitchConnection = new OSCConnection(8000, "/note");
@@ -113,7 +119,10 @@ public class ThereminListener extends Listener {
 
     	System.out.println(tone);
     	
-    	// Send Data to PureData
+    	// update the graphics model
+    	graphicsModel.setPitch(tone);
+    	graphicsModel.setVolume(level);
+    	
     	if(!pitchConnection.sendPitch(tone, level)){
     		System.out.println("ERROR: message did not send");
     	}  
