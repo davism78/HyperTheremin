@@ -14,6 +14,11 @@ class Theremin {
 		GraphicsModel graphics = new GraphicsModel();
 		GraphicsView gui = new GraphicsView(graphics);
 		
+		// TODO: auto start PD with our pd file
+		// we can use java.io.runtime:
+		// Runtime rt = Runtime.getRuntime();
+		// Process ps = rt.exec("path/to/pd.exe path/to/src.pd");
+		
 		// Create a sample listener and controller
 		ThereminListener listener = new ThereminListener(graphics);
 		Controller controller = new Controller();

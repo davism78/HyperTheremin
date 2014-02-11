@@ -10,7 +10,10 @@ import com.leapmotion.leap.Listener;
 import com.leapmotion.leap.Vector;
 
 public class ThereminListener extends Listener {
-	private static final double SCALE = 40.0;   // arbitrary
+	public static final boolean DEBUG = false;
+	
+	private  double SCALE = 40.0;   // will be determined by tuning
+	
 	private static final double OFFSET = 25.0; // Leap motion min sensitivity 
 	private static final double MAXFREQ = 20000.0; // freq when touching antennae
 	
@@ -40,6 +43,16 @@ public class ThereminListener extends Listener {
         System.out.println("Exited");
     }
     
+    private static void printDebug(String message){
+    	if (DEBUG){
+    		System.out.println(message);
+    	}
+    }
+    
+    public void setPitchScale(double scale){
+    	SCALE = scale;
+    }
+    
     /*
      * Evaluate fingers position into a double value representing a pitch
      * Pitch is determined by distance from virtual antennae which is calculated here
@@ -47,6 +60,7 @@ public class ThereminListener extends Listener {
      * 
      * TODO: this method doesn't work well with multiple fingers
      * 		 desired function would be to base tone on closest point on the entire hand
+     * TODO: implement tuning functionality, tuning should alter SCALE variable 
      */
     private double getTone(FingerList fingers) {
     	float max = fingers.get(0).tipPosition().getX();
@@ -72,11 +86,13 @@ public class ThereminListener extends Listener {
      * Evaluate a fingers position into an double value representing volume level
      * 
      * TODO filter out crackling when changing level
+     * TODO fine tune volume scaling, this will be hardcoded
      */
     private double getLevel(Finger finger) {
        	Vector v = finger.tipPosition();
        	float Yval = v.getY();
-       	System.out.println("Y VAL: " + Yval);
+       	
+       	printDebug("Y VAL: " + Yval);
        	
        	// Volume formula  = C * log(height - offset)
        	// The formula should pin the height of OFFSET to 0 db
@@ -117,14 +133,14 @@ public class ThereminListener extends Listener {
     		}
     	}
 
-    	System.out.println(tone);
+    	printDebug(Double.toString(tone));
     	
     	// update the graphics model
     	graphicsModel.setPitch(tone);
     	graphicsModel.setVolume(level);
     	
     	if(!pitchConnection.sendPitch(tone, level)){
-    		System.out.println("ERROR: message did not send");
+    		printDebug("ERROR: message did not send");
     	}  
     } 
 }
