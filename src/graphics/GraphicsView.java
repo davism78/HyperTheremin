@@ -1,13 +1,24 @@
 package graphics;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+
+import javax.imageio.ImageIO;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.opengl.ImageIOImageData;
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.ResourceLoader;
 
 public class GraphicsView {
 	
 	private GraphicsModel model;
+	private Texture background;
 	
 	private boolean isCreated;
 	
@@ -25,7 +36,20 @@ public class GraphicsView {
 			Display.create();
 			Display.setVSyncEnabled(true);
 			Display.setTitle(GraphicsUtils.TITLE);
+
 		} catch (LWJGLException e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+		
+		try {
+			background = TextureLoader.getTexture("JPG", ResourceLoader.getResourceAsStream("res/theremin.jpg"));
+			Display.setIcon(new ByteBuffer[] {
+                    new ImageIOImageData().imageToByteBuffer(ImageIO.read(new File("res/icon_16.png")), false, false, null),
+                    new ImageIOImageData().imageToByteBuffer(ImageIO.read(new File("res/icon_32.png")), false, false, null)
+                    });
+
+		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(0);
 		}
@@ -78,8 +102,20 @@ public class GraphicsView {
 	}
 
 	private void render() {
+		background.bind();
 		
-		GL11.glColor3f(1, 1, 0);
+		GL11.glBegin(GL11.GL_QUADS);
+			GL11.glTexCoord2f(0,0);
+			GL11.glVertex2f(0, 0);
+			GL11.glTexCoord2f(1,0);
+			GL11.glVertex2f(background.getTextureWidth(), 0);
+			GL11.glTexCoord2f(1,1);
+			GL11.glVertex2f(0 + background.getTextureWidth(), 0 + background.getTextureHeight());
+			GL11.glTexCoord2f(0,1);
+			GL11.glVertex2f(0, 0 + background.getTextureHeight());
+		GL11.glEnd();	
+		
+		GL11.glColor3f(1, 1, 1);
 		
 		renderString(50, 50, "Pitch: " + model.getPitch());
 		renderString(50, 75, "Volume: " + model.getVolume());

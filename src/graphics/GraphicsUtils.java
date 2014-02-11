@@ -5,7 +5,7 @@ import java.awt.Font;
 import org.newdawn.slick.TrueTypeFont;
 
 public class GraphicsUtils {
-	public static final int DEFAULT_WIDTH = 800;
+	public static final int DEFAULT_WIDTH = 740;
 	public static final int DEFAULT_HEIGHT = 600;
 	public static final String TITLE = "Theremin";
 	public static final boolean FULL_SCREEN = false;
