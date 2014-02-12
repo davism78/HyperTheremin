@@ -8,7 +8,9 @@ import com.leapmotion.leap.FingerList;
 import com.leapmotion.leap.Frame;
 import com.leapmotion.leap.Listener;
 import com.leapmotion.leap.Vector;
+import static graphics.ThereminMode.*;
 
+// TODO 
 public class ThereminListener extends Listener {
 	public static final boolean DEBUG = false;
 	
@@ -110,6 +112,10 @@ public class ThereminListener extends Listener {
      * 		also if you put left hand it first, it will not map it to volume when you put in right hand
      */
     public void onFrame(Controller controller) {
+    	// check for state change gesture
+    	// update state variable
+    	// 
+    	
     	Frame frame = controller.frame();
     	double level = 0;
     	double tone = 0;
