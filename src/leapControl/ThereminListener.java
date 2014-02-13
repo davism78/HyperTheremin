@@ -61,6 +61,8 @@ public class ThereminListener extends Listener {
      * Pitch is determined by distance from virtual antennae which is calculated here
      * The virtual antennae location is specified by ANTENNAE
      * 
+     * The pitch returned will always be <= 18000
+     * 
      * TODO: this method doesn't work well with multiple fingers
      * 		 desired function would be to base tone on closest point on the entire hand
      * TODO: implement tuning functionality, tuning should alter SCALE variable 
@@ -93,6 +95,8 @@ public class ThereminListener extends Listener {
     
     /*
      * Evaluate a fingers position into an double value representing volume level
+     * 
+     * The level returned will be <= 100
      * 
      * TODO filter out crackling when changing level
      * TODO fine tune volume scaling, this will be hardcoded
@@ -153,11 +157,16 @@ public class ThereminListener extends Listener {
 
     	printDebug(Double.toString(tone));
     	
-    	// update the graphics model
+    	// TODO: update the graphics model
+    	// TODO: move these into getLevel and getVolume, they should pass position data now
     	graphicsModel.setPitch(tone);
     	graphicsModel.setVolume(level);
     	
-    	if(!pitchConnection.sendPitch(tone, level)){
+    	
+    	// Audio data is sent to PureData here, data is 
+    	boolean pitchSent = pitchConnection.sendPitch(tone, level);
+    	
+    	if(!pitchSent){
     		printDebug("ERROR: message did not send");
     	}  
     } 
