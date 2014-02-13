@@ -6,10 +6,13 @@ import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Finger;
 import com.leapmotion.leap.FingerList;
 import com.leapmotion.leap.Frame;
+import com.leapmotion.leap.Hand;
 import com.leapmotion.leap.Listener;
 import com.leapmotion.leap.Vector;
+
 import static graphics.ThereminMode.*;
 
+//TODO: fix up indentation
 public class ThereminListener extends Listener {
 	public static final boolean DEBUG = false;
 	
@@ -57,9 +60,11 @@ public class ThereminListener extends Listener {
     }
     
     /*
-     * Evaluate fingers position into a double value representing a pitch
+     * Evaluate hands position into a double value representing a pitch
      * Pitch is determined by distance from virtual antennae which is calculated here
      * The virtual antennae location is specified by ANTENNAE
+     * 
+     * The closest finger to the antennae will be used
      * 
      * The pitch returned will always be <= 18000
      * 
@@ -67,9 +72,12 @@ public class ThereminListener extends Listener {
      * 		 desired function would be to base tone on closest point on the entire hand
      * TODO: implement tuning functionality, tuning should alter SCALE variable 
      */
-    private double getTone(FingerList fingers) {
-    	float max = fingers.get(0).tipPosition().getX();
-       	for (Finger finger : fingers){
+    private double getTone(Hand hand/*FingerList fingers*/) {
+    	if (hand == null)
+    		return 0;
+    	
+    	float max = hand.fingers().get(0).tipPosition().getX();
+       	for (Finger finger : hand.fingers()){
        		float v = finger.tipPosition().getX();
        		if (v > max){
        			max = v;
@@ -94,15 +102,19 @@ public class ThereminListener extends Listener {
     
     
     /*
-     * Evaluate a fingers position into an double value representing volume level
+     * Evaluate a hand into an double value representing volume level
+     * The first finger on the hand is used
      * 
      * The level returned will be <= 100
      * 
      * TODO filter out crackling when changing level
      * TODO fine tune volume scaling, this will be hardcoded
      */
-    private double getLevel(Finger finger) {
-       	Vector v = finger.tipPosition();
+    private double getLevel(Hand hand) {
+    		if (hand == null)
+    			return 0;
+    		
+       	Vector v = hand.fingers().get(0).tipPosition();
        	float Yval = v.getY();
        	
        	printDebug("Y VAL: " + Yval);
@@ -128,33 +140,39 @@ public class ThereminListener extends Listener {
      * 		also if you put left hand it first, it will not map it to volume when you put in right hand
      */
     public void onFrame(Controller controller) {
-    	// check for state change gesture
-    	// update state variable
-    	// 
+    	// TODO: check for state change gesture
+    	// TODO: update state variable
     	
     	Frame frame = controller.frame();
     	double level = 0;
     	double tone = 0;
     	
-    	System.out.println("#Hands: " + frame.hands().count());
-    	// Process hands
+    	// Evaluate Hands, decide which hands are left and right,
+    	// if there is only 1 hand, left will be null
+    	// if there are no hands left and right will be null
+    	// getTone and getLevel should handle null objects accordingly
+    	
+    	Hand right = null;
+    	Hand left = null;
+    	int count = frame.hands().count();
+    	System.out.println("#Hands: " + count);
 
-    	if (frame.hands().count() >= 1){
-    		// get pitch data
-    		FingerList tones = frame.hands().get(0).fingers();
-    		if (!tones.isEmpty()){
-    			tone = getTone(tones);
-    		}
+    	if (count > 0){ 
+    		// there is a pitch hand
+    		right = frame.hands().rightmost();
+    	} 
+    	if (count > 1){
+    		// there is also a level hand, need to find the left one
+    		left = frame.hands().leftmost();
     	}
     	
-    	if (frame.hands().count() >= 2){
-    		// get volume data
-    		FingerList levels = frame.hands().get(frame.hands().count() - 1).fingers();
-    		if (!levels.isEmpty()){
-    			level = getLevel(levels.get(0));
-    		}
-    	}
-
+    	// Process hands, we know which is left and right now so lets call
+    	// getTone and getLevel. This happens regardless of weather they are
+    	// null or not.
+    	
+    	tone = getTone(right);
+    	level = getLevel(left);
+    	
     	printDebug(Double.toString(tone));
     	
     	// TODO: update the graphics model
