@@ -10,10 +10,11 @@ import com.leapmotion.leap.Listener;
 import com.leapmotion.leap.Vector;
 import static graphics.ThereminMode.*;
 
-// TODO 
 public class ThereminListener extends Listener {
 	public static final boolean DEBUG = false;
 	
+	
+	//TODO: this should move to a reference value in graphicsModel
 	private  double SCALE = 40.0;   // will be determined by tuning
 	
 	private static final double OFFSET = 25.0; // Leap motion min sensitivity 
@@ -81,8 +82,14 @@ public class ThereminListener extends Listener {
        	// SCALE is used to tune the pitch scale
        	double tone = MAXFREQ * Math.pow(.5,  position / SCALE);
 
+       	// 18000 Hz is limit on pitch
+    		if (tone > 18000.0) {
+    			tone = 18000.0;
+    		}
+       	
        	return tone;
     }
+    
     
     /*
      * Evaluate a fingers position into an double value representing volume level
@@ -100,6 +107,11 @@ public class ThereminListener extends Listener {
        	// The formula should pin the height of OFFSET to 0 db
        	// Levels beyond 0 are computed logarithmically and scaled with a constant
        	double level = 17 * Math.log(Yval - OFFSET);
+       	
+       	// 1000 db will be the limit on volume
+    		if (level > 100.0){
+    			level = 100.0;
+    		}
        	
        	return level;
     }

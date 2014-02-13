@@ -117,7 +117,7 @@ public class GraphicsView {
 		
 		GL11.glColor3f(1, 1, 1);
 		
-		// redterString(tuning stuff model.getTune())
+		// renderString(tuning stuff model.getTune())
 		
 		// case playing
 		// render hands

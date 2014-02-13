@@ -46,13 +46,7 @@ public class OSCConnection {
 	
 	public boolean sendPitch(double tone, double level){
 		// Check for maximum allowed values
-		// TODO put this back in getTone/getLevel
-		if (level > 100.0){
-       		level = 100.0;
-		}
-		if (tone > 18000.0) {
-			tone = 18000.0;
-		}
+
 		return sendOSCMessage(nodeName, new Float(tone), new Float(level));
 	}
 

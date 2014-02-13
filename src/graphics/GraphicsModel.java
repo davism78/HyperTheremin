@@ -1,14 +1,21 @@
 package graphics;
 
+import leapControl.HandData;
+
 import org.newdawn.slick.TrueTypeFont;
+
 import static graphics.ThereminMode.*;
 
 public class GraphicsModel {
 	
 	private TrueTypeFont font;
 	
-	// TODO create HandData object containing pitch/volume and position
-	// these fields are those objects
+	// These fields contain data about each hand.
+	// each hand should have 
+	private HandData pitchHand;
+	private HandData levelHand;
+
+	// These will be deprecated
 	private double pitchValue;
 	private double volumeLevel;
 	
@@ -18,6 +25,8 @@ public class GraphicsModel {
 	public GraphicsModel() {
 		pitchValue = GraphicsUtils.DEFAULT_VAL;
 		volumeLevel = GraphicsUtils.DEFAULT_VAL;
+		
+		// default to play mode
 		currentMode = PLAYMODE;
 	}
 	
