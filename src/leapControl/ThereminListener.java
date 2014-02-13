@@ -97,6 +97,10 @@ public class ThereminListener extends Listener {
     			tone = 18000.0;
     		}
        	
+    		// communicate with graphics
+    		// TODO: needs to pass position
+    		graphicsModel.setPitch(tone);
+    		// return value
        	return tone;
     }
     
@@ -129,6 +133,10 @@ public class ThereminListener extends Listener {
     			level = 100.0;
     		}
        	
+    		// communicate with graphics
+    		// TODO: needs to pass position
+      	graphicsModel.setVolume(level);
+      	// return value
        	return level;
     }
     
@@ -155,7 +163,7 @@ public class ThereminListener extends Listener {
     	Hand right = null;
     	Hand left = null;
     	int count = frame.hands().count();
-    	System.out.println("#Hands: " + count);
+    	printDebug("#Hands: " + count);
 
     	if (count > 0){ 
     		// there is a pitch hand
@@ -173,15 +181,13 @@ public class ThereminListener extends Listener {
     	tone = getTone(right);
     	level = getLevel(left);
     	
+    	// TODO: update the graphics model
+    	
+    	// Now lets send the audio data to PureData,
+    	// tone and level handled by sendPitch
+    	
     	printDebug(Double.toString(tone));
     	
-    	// TODO: update the graphics model
-    	// TODO: move these into getLevel and getVolume, they should pass position data now
-    	graphicsModel.setPitch(tone);
-    	graphicsModel.setVolume(level);
-    	
-    	
-    	// Audio data is sent to PureData here, data is 
     	boolean pitchSent = pitchConnection.sendPitch(tone, level);
     	
     	if(!pitchSent){
