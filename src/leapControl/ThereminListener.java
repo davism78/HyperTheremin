@@ -159,15 +159,18 @@ public class ThereminListener extends Listener {
          * in the graphics model and state transitions are based on gestures
          */
         
+        ThereminMode oldmode = graphicsModel.getMode();
+        printDebug("STATE: " + oldmode, 1);
+
         GestureList gests = frame.gestures();
         assert(gests.count() <= 1);
+        
         if (gests.count() > 0){
             // state change triggered
-            printDebug("STATE TRANSFER: GESTURE SEEN", 0);
+            printDebug("STATE TRANSFER: GESTURE SEEN", 1);
             
             Gesture gest = gests.get(0);
-            ThereminMode oldmode = graphicsModel.getMode();
-
+            
             if (gest.type() == Gesture.Type.TYPE_SCREEN_TAP){
                 // tune/play mode transition
                 if (oldmode == PLAYMODE)
@@ -179,14 +182,29 @@ public class ThereminListener extends Listener {
                 // record/play not implemented
             }
         }
-            
-        // TODO: case functionality on STATE
+
         /*
-         * Evaluate Hands, decide which hands are left and right,
+         * We have determined the state we are in so now we need to execute the 
+         * corresponding behavior.
+         */
+        
+        ThereminMode newmode = graphicsModel.getMode();
+        
+        if (newmode == PLAYMODE) {
+            doPlayMode(frame);
+        } else if (newmode == TUNEMODE){
+            return; // unimplemented
+        }
+    }
+    
+    private void doPlayMode(Frame frame){
+        /*
+         * 1. Evaluate Hands, decide which hands are left and right,
          * if there is only 1 hand, left will be null
          * if there are no hands left and right will be null
          * getTone and getLevel should handle null objects accordingly
          */
+        
         double level, tone = 0;
             
         Hand right = null;
@@ -204,7 +222,7 @@ public class ThereminListener extends Listener {
         }
         
         /*
-         * Process hands, we know which is left and right now so lets call
+         * 2. Process hands, we know which is left and right now so lets call
          * getTone and getLevel. This happens regardless of weather they are
          * null or not.
          */
