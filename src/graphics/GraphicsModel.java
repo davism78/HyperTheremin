@@ -30,8 +30,10 @@ public class GraphicsModel {
 		currentMode = PLAYMODE;
 	}
 	
-	public void setMode(ThereminMode mode){
-		currentMode = mode;
+	public ThereminMode setMode(ThereminMode mode){
+		ThereminMode old = mode;
+	    currentMode = mode;
+		return old;
 	}
 	
 	public ThereminMode getMode(){

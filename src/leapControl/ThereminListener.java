@@ -1,20 +1,16 @@
 package leapControl;
 
 import graphics.GraphicsModel;
+import graphics.ThereminMode;
 
-import com.leapmotion.leap.Controller;
-import com.leapmotion.leap.Finger;
-import com.leapmotion.leap.FingerList;
-import com.leapmotion.leap.Frame;
-import com.leapmotion.leap.Hand;
-import com.leapmotion.leap.Listener;
-import com.leapmotion.leap.Vector;
+import com.leapmotion.leap.*;
 
 import static graphics.ThereminMode.*;
 
 //TODO: fix up indentation
 public class ThereminListener extends Listener {
-    public static final boolean DEBUG = false;
+    // make this higher for more info
+    public static final int DEBUG = 1;
 
     // TODO: this should move to a reference value in graphicsModel
     private double SCALE = 40.0; // will be determined by tuning
@@ -50,8 +46,12 @@ public class ThereminListener extends Listener {
         System.out.println("Exited");
     }
 
-    private static void printDebug(String message) {
-        if (DEBUG) {
+    private static void printDebug(String message){
+        printDebug(message, 5);
+    }
+    
+    private static void printDebug(String message, int dbgLevel) {
+        if (DEBUG >= dbgLevel) {
             System.out.println(message);
         }
     }
@@ -149,18 +149,46 @@ public class ThereminListener extends Listener {
      * TODO when removing hand from frame, controller can get confused
      */
     public void onFrame(Controller controller) {
-        // TODO: check for state change gesture
+        // Get this frame
+        Frame frame = controller.frame();
         // TODO: update state variable
 
-        Frame frame = controller.frame();
-        double level = 0;
-        double tone = 0;
+        /*
+         * The first thing we must do is evaluate our state.  We can be in 
+         * either PLAY, TUNE, or RECORD mode.  The current state is stored 
+         * in the graphics model and state transitions are based on gestures
+         */
+        
+        GestureList gests = frame.gestures();
+        assert(gests.count() <= 1);
+        if (gests.count() > 0){
+            // state change triggered
+            printDebug("STATE TRANSFER: GESTURE SEEN", 0);
+            
+            Gesture gest = gests.get(0);
+            ThereminMode oldmode = graphicsModel.getMode();
 
-        // Evaluate Hands, decide which hands are left and right,
-        // if there is only 1 hand, left will be null
-        // if there are no hands left and right will be null
-        // getTone and getLevel should handle null objects accordingly
-
+            if (gest.type() == Gesture.Type.TYPE_SCREEN_TAP){
+                // tune/play mode transition
+                if (oldmode == PLAYMODE)
+                    graphicsModel.setMode(TUNEMODE);
+                else if (oldmode == TUNEMODE)
+                    graphicsModel.setMode(PLAYMODE);
+                // noop in RECORDMODE
+            } else if (gest.type() == Gesture.Type.TYPE_KEY_TAP){
+                // record/play not implemented
+            }
+        }
+            
+        // TODO: case functionality on STATE
+        /*
+         * Evaluate Hands, decide which hands are left and right,
+         * if there is only 1 hand, left will be null
+         * if there are no hands left and right will be null
+         * getTone and getLevel should handle null objects accordingly
+         */
+        double level, tone = 0;
+            
         Hand right = null;
         Hand left = null;
         int count = frame.hands().count();
@@ -174,18 +202,21 @@ public class ThereminListener extends Listener {
             // there is also a level hand, need to find the left one
             left = frame.hands().leftmost();
         }
-
-        // Process hands, we know which is left and right now so lets call
-        // getTone and getLevel. This happens regardless of weather they are
-        // null or not.
+        
+        /*
+         * Process hands, we know which is left and right now so lets call
+         * getTone and getLevel. This happens regardless of weather they are
+         * null or not.
+         */
 
         tone = getTone(right);
         level = getLevel(left);
 
         // TODO: update the graphics model
-
-        // Now lets send the audio data to PureData,
-        // tone and level handled by sendPitch
+        /*
+         * Now lets send the audio data to PureData,
+         * tone and level handled by sendPitch
+         */
 
         printDebug(Double.toString(tone));
 

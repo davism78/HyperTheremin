@@ -6,6 +6,7 @@ import leapControl.ThereminListener;
 import org.lwjgl.LWJGLException;
 
 import com.leapmotion.leap.Controller;
+import com.leapmotion.leap.Gesture;
 
 
 class Theremin {
@@ -19,10 +20,13 @@ class Theremin {
 		// Runtime rt = Runtime.getRuntime();
 		// Process ps = rt.exec("path/to/pd.exe path/to/src.pd");
 		
-		// Create a sample listener and controller
+		// Create a theremin listener and controller
 		ThereminListener listener = new ThereminListener(graphics);
 		Controller controller = new Controller();
-		// Have the sample listener receive events from the controller
+		// Have the sample theremin receive events from the controller
+		
+		controller.enableGesture(Gesture.Type.TYPE_SCREEN_TAP); // for tuning
+		controller.enableGesture(Gesture.Type.TYPE_KEY_TAP);    // for recording
 		controller.addListener(listener);
 
 		// run the graphics
