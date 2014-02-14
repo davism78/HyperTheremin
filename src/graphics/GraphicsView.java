@@ -109,14 +109,14 @@ public class GraphicsView {
 		background.bind();
 		
 		GL11.glBegin(GL11.GL_QUADS);
-			GL11.glTexCoord2f(0,0);
-			GL11.glVertex2f(0, 0);
-			GL11.glTexCoord2f(1,0);
-			GL11.glVertex2f(background.getTextureWidth(), 0);
-			GL11.glTexCoord2f(1,1);
-			GL11.glVertex2f(0 + background.getTextureWidth(), 0 + background.getTextureHeight());
-			GL11.glTexCoord2f(0,1);
-			GL11.glVertex2f(0, 0 + background.getTextureHeight());
+		GL11.glTexCoord2f(0,0);
+		GL11.glVertex2f(0, 0);
+		GL11.glTexCoord2f(1,0);
+		GL11.glVertex2f(background.getTextureWidth(), 0);
+		GL11.glTexCoord2f(1,1);
+		GL11.glVertex2f(0 + background.getTextureWidth(), 0 + background.getTextureHeight());
+		GL11.glTexCoord2f(0,1);
+		GL11.glVertex2f(0, 0 + background.getTextureHeight());
 		GL11.glEnd();	
 
 		// TODO: hand positions are based on old model of pitch and volume, change to HandData based
@@ -124,14 +124,14 @@ public class GraphicsView {
 			int pitchCoord = (int)Math.floor(model.getPitch());
 			rightHand.bind();
 			GL11.glBegin(GL11.GL_QUADS);
-				GL11.glTexCoord2f(0,0);
-				GL11.glVertex2f(pitchCoord, 250);
-				GL11.glTexCoord2f(1,0);
-				GL11.glVertex2f(pitchCoord + rightHand.getTextureWidth(), 250);
-				GL11.glTexCoord2f(1,1);
-				GL11.glVertex2f(pitchCoord + rightHand.getTextureWidth(), 250 + rightHand.getTextureHeight());
-				GL11.glTexCoord2f(0,1);
-				GL11.glVertex2f(pitchCoord, 250 + rightHand.getTextureHeight());
+			GL11.glTexCoord2f(0,0);
+			GL11.glVertex2f(pitchCoord, 250);
+			GL11.glTexCoord2f(1,0);
+			GL11.glVertex2f(pitchCoord + rightHand.getTextureWidth(), 250);
+			GL11.glTexCoord2f(1,1);
+			GL11.glVertex2f(pitchCoord + rightHand.getTextureWidth(), 250 + rightHand.getTextureHeight());
+			GL11.glTexCoord2f(0,1);
+			GL11.glVertex2f(pitchCoord, 250 + rightHand.getTextureHeight());
 			GL11.glEnd();
 		}
 		
@@ -139,14 +139,14 @@ public class GraphicsView {
 			int volumeCoord = (int) Math.floor(model.getVolume());
 			leftHand.bind();
 			GL11.glBegin(GL11.GL_QUADS);
-				GL11.glTexCoord2f(0,0);
-				GL11.glVertex2f(50, 450 - volumeCoord);
-				GL11.glTexCoord2f(1,0);
-				GL11.glVertex2f(50 + rightHand.getTextureWidth(), 450 - volumeCoord);
-				GL11.glTexCoord2f(1,1);
-				GL11.glVertex2f(50 + rightHand.getTextureWidth(), 450 - volumeCoord + rightHand.getTextureHeight());
-				GL11.glTexCoord2f(0,1);
-				GL11.glVertex2f(50, 450 - volumeCoord + rightHand.getTextureHeight());
+			GL11.glTexCoord2f(0,0);
+			GL11.glVertex2f(50, 450 - volumeCoord);
+			GL11.glTexCoord2f(1,0);
+			GL11.glVertex2f(50 + rightHand.getTextureWidth(), 450 - volumeCoord);
+			GL11.glTexCoord2f(1,1);
+			GL11.glVertex2f(50 + rightHand.getTextureWidth(), 450 - volumeCoord + rightHand.getTextureHeight());
+			GL11.glTexCoord2f(0,1);
+			GL11.glVertex2f(50, 450 - volumeCoord + rightHand.getTextureHeight());
 			GL11.glEnd();
 		}	
 		
