@@ -13,7 +13,7 @@ public class ThereminListener extends Listener {
     public static final int DEBUG = 1;
 
     // TODO: this should move to a reference value in graphicsModel
-    private double SCALE = 40.0; // will be determined by tuning
+    private double SCALE; // will be determined by tuning
 
     private static final double OFFSET = 25.0; // Leap motion min sensitivity
     private static final double MAXFREQ = 20000.0; // freq when touching
@@ -27,6 +27,7 @@ public class ThereminListener extends Listener {
 
     public ThereminListener(GraphicsModel model) {
         this.graphicsModel = model;
+        SCALE = 40.0; // default initial value
     }
 
     public void onInit(Controller controller) {
@@ -74,8 +75,11 @@ public class ThereminListener extends Listener {
      * implement tuning functionality, tuning should alter SCALE variable
      */
     private double getTone(Hand hand/* FingerList fingers */) {
-        if (hand == null)
+        if (hand == null){
+            // if we get here, there is no pitch hand in the frame
+            graphicsModel.setPitch(0);
             return 0;
+        }
 
         float max = hand.fingers().get(0).tipPosition().getX();
         for (Finger finger : hand.fingers()) {
@@ -116,8 +120,11 @@ public class ThereminListener extends Listener {
      * scaling, this will be hardcoded
      */
     private double getLevel(Hand hand) {
-        if (hand == null)
+        if (hand == null){
+            // if we get here, there is no level hand in the frame
+            graphicsModel.setVolume(0);
             return 0;
+        }
 
         Vector v = hand.fingers().get(0).tipPosition();
         float Yval = v.getY();
@@ -144,14 +151,17 @@ public class ThereminListener extends Listener {
 
     /*
      * This method is intended to transform a finger point position into an
-     * audio frequency that can be used as input to an oscillator.
+     * audio frequency that can be used as input to an oscillator.  
      * 
-     * TODO when removing hand from frame, controller can get confused
+     * This method deals with the internal state of the instrument.  It evaluates
+     * if a state transition should be made and handles the transition.  After 
+     * that it calls the correct method to handle the frame data for the current 
+     * state.
+     * 
      */
     public void onFrame(Controller controller) {
         // Get this frame
         Frame frame = controller.frame();
-        // TODO: update state variable
 
         /*
          * The first thing we must do is evaluate our state.  We can be in 
@@ -191,12 +201,20 @@ public class ThereminListener extends Listener {
         ThereminMode newmode = graphicsModel.getMode();
         
         if (newmode == PLAYMODE) {
+            // doPlayMode should handle all actions in playmode
             doPlayMode(frame);
         } else if (newmode == TUNEMODE){
-            return; // unimplemented
+            // doTuneMode should handle tuning
+            doTuneMode(frame);
         }
     }
     
+    /*
+     * This method handles all behavior for the main play state of the theremin.
+     * 1. evaluate number of hands and their functions
+     * 2. Process hand data into usable data
+     * 3. Send this data to audio synthesis
+     */
     private void doPlayMode(Frame frame){
         /*
          * 1. Evaluate Hands, decide which hands are left and right,
@@ -226,13 +244,13 @@ public class ThereminListener extends Listener {
          * getTone and getLevel. This happens regardless of weather they are
          * null or not.
          */
-
+        
         tone = getTone(right);
         level = getLevel(left);
 
         // TODO: update the graphics model
         /*
-         * Now lets send the audio data to PureData,
+         * 3. Now lets send the audio data to PureData,
          * tone and level handled by sendPitch
          */
 
@@ -242,6 +260,18 @@ public class ThereminListener extends Listener {
 
         if (!pitchSent) {
             printDebug("ERROR: message did not send");
+        }
+    }
+    
+    private void doTuneMode(Frame frame){
+        HandList hands = frame.hands();
+        if (hands.count() > 0){
+            Hand hand = hands.get(0);
+            
+            Finger left = hand.fingers().leftmost();
+            Finger right = hand.fingers().rightmost();
+            
+            // now calculate finger distance 
         }
     }
 }
