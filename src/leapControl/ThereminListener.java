@@ -7,7 +7,6 @@ import com.leapmotion.leap.*;
 
 import static graphics.ThereminMode.*;
 
-//TODO: fix up indentation
 public class ThereminListener extends Listener {
     // make this higher for more info
     public static final int DEBUG = 1;
@@ -70,9 +69,8 @@ public class ThereminListener extends Listener {
      * 
      * The pitch returned will always be <= 18000
      * 
-     * TODO: this method doesn't work well with multiple fingers desired
-     * function would be to base tone on closest point on the entire hand TODO:
-     * implement tuning functionality, tuning should alter SCALE variable
+     * TODO: this method doesn't work well with multiple fingers. desired
+     * function would be to base tone on closest point on the entire hand
      */
     private double getTone(Hand hand/* FingerList fingers */) {
         if (hand == null){
@@ -263,6 +261,12 @@ public class ThereminListener extends Listener {
         }
     }
     
+    /*
+     * This method handles behevior of instrument in tuning state
+     * 1. decide if there is a hand shown
+     * 2. decide if it has multiple fingers
+     * 3. if so, alter theremin tuning based on most extreme fingers
+     */
     private void doTuneMode(Frame frame){
         HandList hands = frame.hands();
         if (hands.count() > 0){
@@ -274,7 +278,7 @@ public class ThereminListener extends Listener {
             
             Hand hand = hands.rightmost();
             
-            // check that there are mutiple fingers
+            // check that there are multiple fingers
             if ( hand.fingers().count() > 1){
                 Finger left = hand.fingers().leftmost();
                 Finger right = hand.fingers().rightmost();
@@ -292,7 +296,7 @@ public class ThereminListener extends Listener {
                  * pitch formula will half or double pitch when you move your finger 
                  * by that amount.
                  */
-                SCALE = octave;
+                setPitchScale(octave);
                 printDebug("SCALE: " + octave, 1);
             }
         }
