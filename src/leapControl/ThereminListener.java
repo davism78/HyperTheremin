@@ -170,7 +170,7 @@ public class ThereminListener extends Listener {
          */
         
         ThereminMode oldmode = graphicsModel.getMode();
-        printDebug("STATE: " + oldmode, 1);
+        printDebug("STATE: " + oldmode, 5);
 
         GestureList gests = frame.gestures();
         assert(gests.count() <= 1);
@@ -266,12 +266,35 @@ public class ThereminListener extends Listener {
     private void doTuneMode(Frame frame){
         HandList hands = frame.hands();
         if (hands.count() > 0){
-            Hand hand = hands.get(0);
+            /*
+             * There is at least one hand.  Lets use the right hand for tuning.  We need 
+             * to get the distance between tips and calculate correct scale value to
+             * assign. 
+             */
             
-            Finger left = hand.fingers().leftmost();
-            Finger right = hand.fingers().rightmost();
+            Hand hand = hands.rightmost();
             
-            // now calculate finger distance 
+            // check that there are mutiple fingers
+            if ( hand.fingers().count() > 1){
+                Finger left = hand.fingers().leftmost();
+                Finger right = hand.fingers().rightmost();
+                
+                // get finger tips
+                double leftpos = left.tipPosition().getX();
+                double rightpos = right.tipPosition().getX();
+                
+                // now calculate the difference between tips
+                // TODO: should this look at more than one axis?
+                double octave = Math.abs(leftpos - rightpos);
+                
+                /*
+                 * If we assign SCALE to be the distance between fingers, our 
+                 * pitch formula will half or double pitch when you move your finger 
+                 * by that amount.
+                 */
+                SCALE = octave;
+                printDebug("SCALE: " + octave, 1);
+            }
         }
     }
 }
