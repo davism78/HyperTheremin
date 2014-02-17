@@ -18,13 +18,13 @@ public class GraphicsModel {
 	// These will be deprecated
 	private double pitchValue;
 	private double volumeLevel;
-	
-	private int scaleValue; // tuning value
+	private TuningData tuningData;
 	private ThereminMode currentMode;
 
 	public GraphicsModel() {
 		pitchValue = GraphicsUtils.DEFAULT_VAL;
 		volumeLevel = GraphicsUtils.DEFAULT_VAL;
+		tuningData = new TuningData();
 		
 		// default to play mode
 		currentMode = PLAYMODE;
@@ -68,4 +68,26 @@ public class GraphicsModel {
 		this.volumeLevel = volumeLevel;
 	}
 	
+	// Methods involved with tuning the theremin
+	
+	public void setLeftAndRightTuningFingers(double left, double right) {
+		this.tuningData.setLeftFingerPos(left);
+		this.tuningData.setRightFingerPos(right);
+	}
+	
+	public double getLeftTuningFinger() {
+		return this.tuningData.getLeftFingerPos();
+	}
+	
+	public double getRightTuningFinger() {
+		return this.tuningData.getRightFingerPos();
+	}
+	
+	public void setScale(double scale) {
+		this.tuningData.setScale(scale);
+	}
+	
+	public double getScale() {
+		return this.tuningData.getScale();
+	}
 }

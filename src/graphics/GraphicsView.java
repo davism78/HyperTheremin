@@ -106,48 +106,18 @@ public class GraphicsView {
 	}
 
 	private void render() {
-		background.bind();
+		// draw background
+		renderTexture(background, 0, 0);
 		
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glTexCoord2f(0,0);
-		GL11.glVertex2f(0, 0);
-		GL11.glTexCoord2f(1,0);
-		GL11.glVertex2f(background.getTextureWidth(), 0);
-		GL11.glTexCoord2f(1,1);
-		GL11.glVertex2f(0 + background.getTextureWidth(), 0 + background.getTextureHeight());
-		GL11.glTexCoord2f(0,1);
-		GL11.glVertex2f(0, 0 + background.getTextureHeight());
-		GL11.glEnd();	
-
 		// TODO: hand positions are based on old model of pitch and volume, change to HandData based
 		if(model.getPitch() > 0.0){
 			int pitchCoord = (int)Math.floor(model.getPitch());
-			rightHand.bind();
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glTexCoord2f(0,0);
-			GL11.glVertex2f(pitchCoord, 250);
-			GL11.glTexCoord2f(1,0);
-			GL11.glVertex2f(pitchCoord + rightHand.getTextureWidth(), 250);
-			GL11.glTexCoord2f(1,1);
-			GL11.glVertex2f(pitchCoord + rightHand.getTextureWidth(), 250 + rightHand.getTextureHeight());
-			GL11.glTexCoord2f(0,1);
-			GL11.glVertex2f(pitchCoord, 250 + rightHand.getTextureHeight());
-			GL11.glEnd();
+			renderTexture(rightHand, pitchCoord, 250);
 		}
 		
 		if(model.getVolume() > 0.0){
 			int volumeCoord = (int) Math.floor(model.getVolume());
-			leftHand.bind();
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glTexCoord2f(0,0);
-			GL11.glVertex2f(50, 450 - volumeCoord);
-			GL11.glTexCoord2f(1,0);
-			GL11.glVertex2f(50 + rightHand.getTextureWidth(), 450 - volumeCoord);
-			GL11.glTexCoord2f(1,1);
-			GL11.glVertex2f(50 + rightHand.getTextureWidth(), 450 - volumeCoord + rightHand.getTextureHeight());
-			GL11.glTexCoord2f(0,1);
-			GL11.glVertex2f(50, 450 - volumeCoord + rightHand.getTextureHeight());
-			GL11.glEnd();
+			renderTexture(leftHand, 50, 450 - volumeCoord);
 		}	
 		
 		GL11.glColor3f(1, 1, 1);
@@ -160,6 +130,21 @@ public class GraphicsView {
 		renderString(50, 75, "Volume: " + model.getVolume());
 		// case tuning
 		// render tuning hand fingers
+	}
+	
+	private void renderTexture(Texture tex, float topLeftX, float topLeftY) {
+		tex.bind();
+		GL11.glBegin(GL11.GL_QUADS);
+		GL11.glTexCoord2f(0,0);
+		GL11.glVertex2f(topLeftX, topLeftY); // topLeft
+		GL11.glTexCoord2f(1,0);
+		GL11.glVertex2f(topLeftX + tex.getTextureWidth(), topLeftY); // topRight
+		GL11.glTexCoord2f(1,1);
+		GL11.glVertex2f(topLeftX + tex.getTextureWidth(), topLeftY + tex.getTextureHeight()); // bottomRight
+		GL11.glTexCoord2f(0,1);
+		GL11.glVertex2f(topLeftX, topLeftY + tex.getTextureHeight()); // bottom left
+		GL11.glEnd();
+		
 	}
 	
 	private void renderString(float x, float y, String message) {
