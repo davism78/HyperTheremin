@@ -109,27 +109,44 @@ public class GraphicsView {
 		// draw background
 		renderTexture(background, 0, 0);
 		
-		// TODO: hand positions are based on old model of pitch and volume, change to HandData based
-		if(model.getPitch() > 0.0){
-			int pitchCoord = (int)Math.floor(model.getPitch());
-			renderTexture(rightHand, pitchCoord, 250);
+		switch(model.getMode()) {
+		case PLAYMODE:
+			// TODO: hand positions are based on old model of pitch and volume, change to HandData based
+			if(model.getPitch() > 0.0){
+				int pitchCoord = (int)Math.floor(model.getPitch());
+				renderTexture(rightHand, pitchCoord, 250);
+			}
+			
+			if(model.getVolume() > 0.0){
+				int volumeCoord = (int) Math.floor(model.getVolume());
+				renderTexture(leftHand, 50, 450 - volumeCoord);
+			}
+			
+			GL11.glColor3f(1, 1, 1);
+
+			renderString(50, 50, "Pitch: " + model.getPitch());
+			renderString(50, 75, "Volume: " + model.getVolume());
+			
+			break;
+		case TUNEMODE:
+			float leftFinger = (float) model.getLeftTuningFinger();
+			float rightFinger = (float) model.getRightTuningFinger();
+			// TODO scale the finger positions so that they are accurately
+			//      displayed on the screen.
+			
+			
+			// draw tuning fingers on the screen
+			renderTexture(leftHand, leftFinger, 250);
+			renderTexture(rightHand, rightFinger, 250);
+			
+			
+			renderString(50, 50, "Tuning Scale: " + model.getScale());
+			
+			break;
+		default:
+			break;
 		}
 		
-		if(model.getVolume() > 0.0){
-			int volumeCoord = (int) Math.floor(model.getVolume());
-			renderTexture(leftHand, 50, 450 - volumeCoord);
-		}	
-		
-		GL11.glColor3f(1, 1, 1);
-		
-		// renderString(tuning stuff model.getTune())
-		
-		// case playing
-		// render hands
-		renderString(50, 50, "Pitch: " + model.getPitch());
-		renderString(50, 75, "Volume: " + model.getVolume());
-		// case tuning
-		// render tuning hand fingers
 	}
 	
 	private void renderTexture(Texture tex, float topLeftX, float topLeftY) {

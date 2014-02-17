@@ -11,9 +11,6 @@ public class ThereminListener extends Listener {
     // make this higher for more info
     public static final int DEBUG = 1;
 
-    // TODO: this should move to a reference value in graphicsModel
-    private double SCALE; // will be determined by tuning
-
     private static final double OFFSET = 25.0; // Leap motion min sensitivity
     private static final double MAXFREQ = 20000.0; // freq when touching
                                                    // antennae
@@ -26,7 +23,7 @@ public class ThereminListener extends Listener {
 
     public ThereminListener(GraphicsModel model) {
         this.graphicsModel = model;
-        SCALE = 40.0; // default initial value
+        this.graphicsModel.setScale(40.0); // default initial value
     }
 
     public void onInit(Controller controller) {
@@ -57,7 +54,7 @@ public class ThereminListener extends Listener {
     }
 
     public void setPitchScale(double scale) {
-        SCALE = scale;
+        graphicsModel.setScale(scale);
     }
 
     /*
@@ -94,7 +91,7 @@ public class ThereminListener extends Listener {
         // This formula pins the maximum frequency to be at the location of
         // ANTENNAE
         // SCALE is used to tune the pitch scale
-        double tone = MAXFREQ * Math.pow(.5, position / SCALE);
+        double tone = MAXFREQ * Math.pow(.5, position / graphicsModel.getScale());
 
         // 18000 Hz is limit on pitch
         if (tone > 18000.0) {
@@ -286,6 +283,7 @@ public class ThereminListener extends Listener {
                 // get finger tips
                 double leftpos = left.tipPosition().getX();
                 double rightpos = right.tipPosition().getX();
+                graphicsModel.setLeftAndRightTuningFingers(leftpos, rightpos);
                 
                 // now calculate the difference between tips
                 // TODO: should this look at more than one axis?
