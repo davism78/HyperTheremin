@@ -1,4 +1,5 @@
-#N canvas 1754 113 928 475 10;
+#N canvas 609 34 928 475 10;
+#X declare -lib osc -lib mrpeach;
 #X obj 438 311 osc~;
 #X obj 440 409 dac~;
 #X obj 438 201 unpackOSC;
@@ -13,6 +14,7 @@
 #X obj 525 341 print rms;
 #X obj 557 288 print db;
 #X obj 438 163 udpreceive 8000;
+#X obj 86 75 import osc mrpeach;
 #X connect 0 0 4 0;
 #X connect 2 0 7 0;
 #X connect 2 0 9 0;

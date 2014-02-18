@@ -21,11 +21,11 @@ public class OSCConnection {
 		remotePort = port;
 		nodeName = name;
 		// The IP Address of the server (or listener) we would like to send to
-	    // For testing we will use the `getLocalHost` function to send to our
-	    // machine, but for using with different physical devices, use something
-	    // like the following commented out line
-	    //InetAddress remoteIP  = InetAddress.getByName("192.168.1.1");
-    	try {
+	  // For testing we will use the `getLocalHost` function to send to our
+	  // machine, but for using with different physical devices, use something
+	  // like the following commented out line
+	  //InetAddress remoteIP  = InetAddress.getByName("192.168.1.1");
+    try {
 			remoteIP = InetAddress.getLocalHost();
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
@@ -40,17 +40,12 @@ public class OSCConnection {
 			e.printStackTrace();
 		}
 		
-        System.out.println("Initialized");
+    System.out.println("Initialized");
 	}
 
 	public boolean sendPitch(double tone, double level){
 		// Check for maximum allowed values
-		if (level > 100.0){
-       		level = 100.0;
-		}
-		if (tone > 20000.0) {
-			tone = 20000.0;
-		}
+
 		return sendOSCMessage(nodeName, new Float(tone), new Float(level));
 	}
 
