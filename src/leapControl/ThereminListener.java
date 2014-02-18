@@ -180,8 +180,11 @@ public class ThereminListener extends Listener {
             
             if (gest.type() == Gesture.Type.TYPE_SCREEN_TAP){
                 // tune/play mode transition
-                if (oldmode == PLAYMODE)
+                if (oldmode == PLAYMODE){
                     graphicsModel.setMode(TUNEMODE);
+                    // mute sound
+                    pitchConnection.sendPitch(0, 0);
+                } 
                 else if (oldmode == TUNEMODE)
                     graphicsModel.setMode(PLAYMODE);
                 // noop in RECORDMODE
@@ -198,7 +201,7 @@ public class ThereminListener extends Listener {
         ThereminMode newmode = graphicsModel.getMode();
         
         if (newmode == PLAYMODE) {
-            // doPlayMode should handle all actions in playmode
+            // doPlayMode should handle all actions in playmodel
             doPlayMode(frame);
         } else if (newmode == TUNEMODE){
             // doTuneMode should handle tuning
