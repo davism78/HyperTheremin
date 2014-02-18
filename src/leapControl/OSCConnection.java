@@ -43,7 +43,6 @@ public class OSCConnection {
         System.out.println("Initialized");
 	}
 
-	
 	public boolean sendPitch(double tone, double level){
 		// Check for maximum allowed values
 		if (level > 100.0){
