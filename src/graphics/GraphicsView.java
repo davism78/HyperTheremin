@@ -21,6 +21,7 @@ public class GraphicsView {
 	private Texture background;
 	private Texture leftHand;
 	private Texture rightHand;
+	private Texture finger;
 	
 	private boolean isCreated;
 	
@@ -46,8 +47,9 @@ public class GraphicsView {
 		
 		try {
 			background = TextureLoader.getTexture("JPG", ResourceLoader.getResourceAsStream("res/theremin.jpg"));
-			leftHand = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/hand_64.png"));
+			leftHand = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/hand_64.png"), false);
 			rightHand = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/hand_64.png"), true);
+			finger = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/finger_64.png"));
 			Display.setIcon(new ByteBuffer[] {
                     new ImageIOImageData().imageToByteBuffer(ImageIO.read(new File("res/icon_16.png")), false, false, null),
                     new ImageIOImageData().imageToByteBuffer(ImageIO.read(new File("res/icon_32.png")), false, false, null)
@@ -129,18 +131,15 @@ public class GraphicsView {
 			
 			break;
 		case TUNEMODE:
-			float leftFinger = (float) model.getLeftTuningFinger();
-			float rightFinger = (float) model.getRightTuningFinger();
-			// TODO scale the finger positions so that they are accurately
-			//      displayed on the screen.
+			
+			double scale = model.getScale();
+			float leftFinger = (float) (Display.getWidth() / 2 - (scale / 2));
+			float rightFinger = (float) (Display.getWidth() / 2 + (scale / 2));
+			renderTexture(finger, leftFinger, 250);
+			renderTexture(finger, rightFinger, 250);
 			
 			
-			// draw tuning fingers on the screen
-			renderTexture(leftHand, leftFinger, 250);
-			renderTexture(rightHand, rightFinger, 250);
-			
-			
-			renderString(50, 50, "Tuning Scale: " + model.getScale());
+			renderString(50, 50, "Tuning Scale: " + scale);
 			
 			break;
 		default:
