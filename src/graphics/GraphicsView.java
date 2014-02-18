@@ -117,12 +117,14 @@ public class GraphicsView {
 			if(model.getPitch() > 0.0){
 				int pitchCoord = (int)Math.floor(model.getPitch());
 				renderTexture(rightHand, pitchCoord, 250);
-			}
+			} else
+				System.out.println("NO PITCH");
 			
 			if(model.getVolume() > 0.0){
 				int volumeCoord = (int) Math.floor(model.getVolume());
 				renderTexture(leftHand, 50, 450 - volumeCoord);
-			}
+			} else
+				System.out.println("NO VOL");
 			
 			GL11.glColor3f(1, 1, 1);
 

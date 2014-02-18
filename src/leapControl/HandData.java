@@ -16,6 +16,10 @@ public class HandData {
 	public double getData(){
 		return data;
 	}
+	
+	public void setData(double data){
+		this.data = data;
+	}
 
 	public double getPos(){
 		return position;

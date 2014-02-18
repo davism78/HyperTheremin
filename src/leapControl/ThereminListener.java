@@ -100,7 +100,8 @@ public class ThereminListener extends Listener {
 
         // communicate with graphics
         // TODO: needs to pass position
-        graphicsModel.setPitch(tone);
+        HandData data = new HandData(tone, position);
+        graphicsModel.setRightHand(data);
         // return value
         return tone;
     }
@@ -139,7 +140,8 @@ public class ThereminListener extends Listener {
 
         // communicate with graphics
         // TODO: needs to pass position
-        graphicsModel.setVolume(level);
+        HandData data = new HandData(level, Yval);
+        graphicsModel.setLeftHand(data);
         // return value
         return level;
     }

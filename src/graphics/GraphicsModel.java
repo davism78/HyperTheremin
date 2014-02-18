@@ -18,6 +18,7 @@ public class GraphicsModel {
 	// These will be deprecated
 	private double pitchValue;
 	private double volumeLevel;
+	
 	private TuningData tuningData;
 	private ThereminMode currentMode;
 
@@ -26,8 +27,19 @@ public class GraphicsModel {
 		volumeLevel = GraphicsUtils.DEFAULT_VAL;
 		tuningData = new TuningData();
 		
+		pitchHand = new HandData(0,0);
+		levelHand = new HandData(0,0);
+
 		// default to play mode
 		currentMode = PLAYMODE;
+	}
+	
+	public void setRightHand(HandData data){
+		pitchHand = data;
+	}
+	
+	public void setLeftHand(HandData data){
+		levelHand = data;
 	}
 	
 	public ThereminMode setMode(ThereminMode mode){
@@ -53,19 +65,19 @@ public class GraphicsModel {
 	}
 	
 	public double getPitch() {
-		return pitchValue;
+		return pitchHand.getData();
 	}
 	
-	public void setPitch(double v){
-		pitchValue = v;
+	public void setPitch(double pitch){
+		pitchHand.setData(pitch);
 	}
 
 	public double getVolume() {
-		return volumeLevel;
+		return levelHand.getData();
 	}
 
 	public void setVolume(double volumeLevel) {
-		this.volumeLevel = volumeLevel;
+		levelHand.setData(volumeLevel);
 	}
 	
 	// Methods involved with tuning the theremin
