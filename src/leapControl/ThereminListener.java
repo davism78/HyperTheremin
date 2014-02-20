@@ -76,6 +76,13 @@ public class ThereminListener extends Listener {
             return 0;
         }
 
+        FingerList figs = hand.fingers();
+        if (figs.isEmpty()){
+            // if we get here, there is no pitch hand in the frame
+            graphicsModel.setPitch(0);
+            return 0;
+        }
+        
         float max = hand.fingers().get(0).tipPosition().getX();
         for (Finger finger : hand.fingers()) {
             float v = finger.tipPosition().getX();
@@ -131,7 +138,7 @@ public class ThereminListener extends Listener {
         // The formula should pin the height of OFFSET to 0 db
         // Levels beyond 0 are computed logarithmically and scaled with a
         // constant
-        double level = 17 * Math.log(Yval - OFFSET);
+        double level = 14 * Math.log(Yval - OFFSET);
 
         // 100 db will be the limit on volume
         if (!(level <= 100.0)) {
