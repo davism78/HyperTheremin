@@ -67,7 +67,7 @@ public class GraphicsView {
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glDisable(GL11.GL_LIGHTING);                   
 		 
-		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);               
+		GL11.glClearColor(0.75f, 0.75f, 0.75f, 0.75f);
 		GL11.glClearDepth(1);                                      
 		 
 		GL11.glEnable(GL11.GL_BLEND);
@@ -120,6 +120,7 @@ public class GraphicsView {
 			break;
 		case MENU:
 			renderMainMenu();
+			break;
 		default:
 			break;
 		}
@@ -127,16 +128,46 @@ public class GraphicsView {
 	}
 
 	private void renderMainMenu() {
-		// 1. Build background
-		// 2. Draw boundary lines
-		// 3. Draw names
-		// 4. Draw handPosition
+		/* 1. Build background
+		 * 2. Draw boundary lines
+		 * 3. Draw names
+		 * 4. Draw handPosition
+		 */
 		
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+		GL11.glColor3f(0, 0, 0);
+		// Draw horizontal line
+		renderLine(0, Display.getHeight() / 2, Display.getWidth(), Display.getHeight() / 2);
+		renderLine(Display.getWidth() / 2, 0, Display.getWidth() / 2, Display.getHeight());
+		/*renderLine(0, model.getMenuData().windowLineY, Display.getWidth(), model.getMenuData().windowLineY);
+		renderLine(model.getMenuData().windowLineX, 0, model.getMenuData().windowLineY, Display.getHeight());*/
+		
+		/*
+		 * Here we display the current Menu selections. This involves determining which state we
+		 * are currently connected to and adding a "selected" addition to the menu button name.
+		 */
+		GL11.glColor3f(0, 0, 0);
+		if(model.getMenuData().getSelectedState() == ThereminMode.PLAY) {
+			GL11.glColor3f(1, 1, 1);
+			renderString(50, 296, "Play Selected");
+			GL11.glColor3f(0, 0, 0);
+		} else {
+			renderString(50, 296, "Play");
+		}
+		if(model.getMenuData().getSelectedState() == ThereminMode.TUNE) {
+			GL11.glColor3f(1, 1, 1);
+			renderString(50 + Display.getWidth() / 2, 296, "Tune Selected");
+			GL11.glColor3f(0, 0, 0);
+		} else {
+			renderString(50 + Display.getWidth() / 2, 296, "Tune");
+		}
 		
 	}
 
 	private void renderTune() {
+		/*
+		 * Draw the fingers relative to the middle of the screen.
+		 */
 		double scale = model.getScale();
 		float leftFinger = (float) (Display.getWidth() / 2 - (scale / 2));
 		float rightFinger = (float) (Display.getWidth() / 2 + (scale / 2));
@@ -148,16 +179,17 @@ public class GraphicsView {
 	}
 
 	private void renderPlay() {
-		// TODO: hand positions are based on old model of pitch and volume, change to HandData based
-		if(model.getPitch() > 0.0){
-			int pitchCoord = (int)Math.floor(model.getPitch());
+		// render pitch hand
+		if(model.getPitch() > 0.0) {
+			int pitchCoord = (int)Math.floor(model.getPitchPosition());
 			renderTexture(rightHand, pitchCoord, 250);
 		} else
 			System.out.println("NO PITCH");
 		
+		// render volume hand
 		if(model.getVolume() > 0.0){
-			int volumeCoord = (int) Math.floor(model.getVolume());
-			renderTexture(leftHand, 50, 450 - volumeCoord);
+			int volumeCoord = (int) Math.floor(model.getVolumePosition());
+			renderTexture(leftHand, 50, volumeCoord);
 		} else
 			System.out.println("NO VOL");
 		
@@ -180,6 +212,13 @@ public class GraphicsView {
 		GL11.glVertex2f(topLeftX, topLeftY + tex.getTextureHeight()); // bottom left
 		GL11.glEnd();
 		
+	}
+	
+	private void renderLine(float x, float y, float x2, float y2) {
+		GL11.glBegin(GL11.GL_QUADS);
+		GL11.glVertex2f(x, y);
+		GL11.glVertex2f(x2, y2);
+		GL11.glEnd();
 	}
 	
 	private void renderString(float x, float y, String message) {

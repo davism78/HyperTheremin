@@ -8,11 +8,13 @@ import com.leapmotion.leap.*;
 import static graphics.ThereminMode.*;
 
 public class ThereminListener extends Listener {
-    // make this higher for more info
+    private static final double DEFAULT_SCALE = 40.0;
+
+	// make this higher for more info
     public static final int DEBUG = 1;
 
     private static final double OFFSET = 25.0; // Leap motion min sensitivity
-    private static final double MAXFREQ = 20000.0; // freq when touching
+    private static final double MAXFREQ = 5000.0; // freq when touching
                                                    // antennae
 
     private static final double ANTENNAE = 350.0; // the distance of the virtual
@@ -23,7 +25,7 @@ public class ThereminListener extends Listener {
 
     public ThereminListener(GraphicsModel model) {
         this.graphicsModel = model;
-        this.graphicsModel.setScale(40.0); // default initial value
+        this.graphicsModel.setScale(DEFAULT_SCALE); // default initial value
     }
 
     public void onInit(Controller controller) {
@@ -107,7 +109,7 @@ public class ThereminListener extends Listener {
 
         // communicate with graphics
         // TODO: needs to pass position
-        HandData data = new HandData(tone, position);
+        HandData data = new HandData(tone, max);
         graphicsModel.setRightHand(data);
         // return value
         return tone;
@@ -190,6 +192,7 @@ public class ThereminListener extends Listener {
             	// Get the CircleGesture and check if a circle has been made
             	CircleGesture circleGest = new CircleGesture(gest);
             	if (circleGest.progress() > 1.0){
+            		// Switch to menu.
             		graphicsModel.setMode(MENU);
                 	
                     // tune/play mode transition
@@ -208,7 +211,7 @@ public class ThereminListener extends Listener {
             	}
             	break;
             default:
-            	printDebug("NON CIRCLE OR KEY TAP GESTURE", 1);
+            	printDebug("DEFAULT GESTURE", 1);
             }
             
         }

@@ -20,8 +20,6 @@ public class GraphicsModel {
 	// MainMenu
 	private MainMenuData menuData;
 	
-	
-
 	public GraphicsModel() {
 		tuningData = new TuningData();
 		menuData = new MainMenuData();
@@ -80,7 +78,26 @@ public class GraphicsModel {
 		levelHand.setData(volumeLevel);
 	}
 	
-	// Methods involved with tuning the theremin
+	/***********************************************
+	 * Methods to retreive position data in pixels, 
+	 * not in millimeters.
+	 ***********************************************/
+	
+	public double getPitchPosition() {
+		// convert pitch HandData to pixel value.
+		double slope = 290.0 / 350.0;
+		return slope * pitchHand.getPos() + 370.0; 
+	}
+	
+	public double getVolumePosition() {
+		// convert volume HandData to pixel value.
+		double slope = -480.0 / 575.0;
+		return slope * (levelHand.getPos() - 600.0);
+	}
+	
+	/********************************************
+	 * Methods involved with tuning the theremin
+	 ********************************************/
 	
 	public void setLeftAndRightTuningFingers(double left, double right) {
 		this.tuningData.setLeftFingerPos(left);
@@ -103,7 +120,9 @@ public class GraphicsModel {
 		return this.tuningData.getScale();
 	}
 
-	// Main Menu methods
+	/******************************************
+	 * Main Menu methods
+	 ******************************************/
 	
 	public MainMenuData getMenuData() {
 		return menuData;

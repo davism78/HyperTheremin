@@ -8,13 +8,15 @@ public class MainMenuData {
 	private double handYPos;
 	
 	// window data
-	public static final int windowLineX = Display.getWidth() / 2;
-	public static final int windowLineY = Display.getHeight() / 2;
+	public int windowLineX;
+	public int windowLineY;
 	
 	public MainMenuData() {
 		selectedState = ThereminMode.MENU;
 		handXPos = 0.0;
 		handYPos = 0.0;
+		windowLineX = Display.getWidth() / 2;
+		windowLineY = Display.getHeight() / 2;
 	}
 	
 	public ThereminMode getSelectedState() {
@@ -34,13 +36,13 @@ public class MainMenuData {
 			if(y < windowLineY) {
 				selectedState = ThereminMode.PLAY;
 			} else {
-				selectedState = ThereminMode.SETTINGS;
+				selectedState = ThereminMode.PLAY; // SETTINGS
 			}
 		} else {
 			if(y < windowLineY) {
 				selectedState = ThereminMode.TUNE;
 			} else {
-				selectedState = ThereminMode.EXIT;
+				selectedState = ThereminMode.TUNE; // EXIT
 			}
 		}
 		handXPos = x;
