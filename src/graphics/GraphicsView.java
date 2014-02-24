@@ -112,42 +112,59 @@ public class GraphicsView {
 		renderTexture(background, 0, 0);
 		
 		switch(model.getMode()) {
-		case PLAYMODE:
-			// TODO: hand positions are based on old model of pitch and volume, change to HandData based
-			if(model.getPitch() > 0.0){
-				int pitchCoord = (int)Math.floor(model.getPitch());
-				renderTexture(rightHand, pitchCoord, 250);
-			} else
-				System.out.println("NO PITCH");
-			
-			if(model.getVolume() > 0.0){
-				int volumeCoord = (int) Math.floor(model.getVolume());
-				renderTexture(leftHand, 50, 450 - volumeCoord);
-			} else
-				System.out.println("NO VOL");
-			
-			GL11.glColor3f(1, 1, 1);
-
-			renderString(50, 50, "Pitch: " + model.getPitch());
-			renderString(50, 75, "Volume: " + model.getVolume());
-			
+		case PLAY:
+			renderPlay();
 			break;
-		case TUNEMODE:
-			
-			double scale = model.getScale();
-			float leftFinger = (float) (Display.getWidth() / 2 - (scale / 2));
-			float rightFinger = (float) (Display.getWidth() / 2 + (scale / 2));
-			renderTexture(finger, leftFinger, 250);
-			renderTexture(finger, rightFinger, 250);
-			
-			
-			renderString(50, 50, "Tuning Scale: " + scale);
-			
+		case TUNE:
+			renderTune();
 			break;
+		case MENU:
+			renderMainMenu();
 		default:
 			break;
 		}
 		
+	}
+
+	private void renderMainMenu() {
+		// 1. Build background
+		// 2. Draw boundary lines
+		// 3. Draw names
+		// 4. Draw handPosition
+		
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+		
+	}
+
+	private void renderTune() {
+		double scale = model.getScale();
+		float leftFinger = (float) (Display.getWidth() / 2 - (scale / 2));
+		float rightFinger = (float) (Display.getWidth() / 2 + (scale / 2));
+		renderTexture(finger, leftFinger, 250);
+		renderTexture(finger, rightFinger, 250);
+		
+		
+		renderString(50, 50, "Tuning Scale: " + scale);
+	}
+
+	private void renderPlay() {
+		// TODO: hand positions are based on old model of pitch and volume, change to HandData based
+		if(model.getPitch() > 0.0){
+			int pitchCoord = (int)Math.floor(model.getPitch());
+			renderTexture(rightHand, pitchCoord, 250);
+		} else
+			System.out.println("NO PITCH");
+		
+		if(model.getVolume() > 0.0){
+			int volumeCoord = (int) Math.floor(model.getVolume());
+			renderTexture(leftHand, 50, 450 - volumeCoord);
+		} else
+			System.out.println("NO VOL");
+		
+		GL11.glColor3f(1, 1, 1);
+
+		renderString(50, 50, "Pitch: " + model.getPitch());
+		renderString(50, 75, "Volume: " + model.getVolume());
 	}
 	
 	private void renderTexture(Texture tex, float topLeftX, float topLeftY) {

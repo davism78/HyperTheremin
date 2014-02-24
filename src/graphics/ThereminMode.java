@@ -1,5 +1,5 @@
 package graphics;
 
 public enum ThereminMode {
-	PLAYMODE, TUNEMODE, RECORDMODE 
+	PLAY, TUNE, MENU, SETTINGS, PLAYBACK, EXIT;
 }

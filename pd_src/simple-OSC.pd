@@ -1,4 +1,5 @@
-#N canvas 244 127 734 504 10;
+#N canvas 532 22 928 475 10;
+#X declare -lib osc -lib mrpeach;
 #X obj 452 202 osc~;
 #X obj 452 363 dac~;
 #X obj 452 92 unpackOSC;
@@ -13,9 +14,9 @@
 #X obj 571 179 print db;
 #X obj 452 54 udpreceive 8000;
 #X obj 11 -30 hsl 500 15 20 2000 0 0 empty empty empty -2 -8 0 10 -262144
--1 -1 7500 1;
+-1 -1 0 1;
 #X obj 11 -82 hsl 128 15 0 120 0 0 empty empty empty -2 -8 0 10 -262144
--1 -1 8800 1;
+-1 -1 0 1;
 #X text 523 -33 pitch;
 #X text 149 -84 volume;
 #X msg 120 224 connect localhost 8000;
@@ -30,12 +31,12 @@
 #X obj 68 184 vd~ vibrato;
 #X obj 67 138 *~ 1;
 #X obj 179 7 vsl 15 128 0.1 3 0 0 empty empty empty 0 -9 0 10 -262144
--1 -1 1900 1;
+-1 -1 0 1;
 #X obj 68 160 +~ 2;
 #X obj 104 -58 delwrite~ vibrato 50;
 #X obj 68 97 osc~ 2;
 #X obj 68 -48 vsl 15 128 1 5 0 0 empty empty empty 0 -9 0 10 -262144
--1 -1 9500 1;
+-1 -1 0 1;
 #X floatatom 222 191 5 0 0 0 - - -;
 #X obj 222 169 +;
 #X obj 179 143 * 2;
@@ -63,6 +64,7 @@
 #X restore 452 295 pd vibrato;
 #X floatatom 66 -51 5 0 0 0 - - -;
 #X floatatom 41 1 5 0 0 0 - - -;
+#X obj 239 43 import osc mrpeach;
 #X connect 0 0 4 0;
 #X connect 2 0 6 0;
 #X connect 2 0 8 0;

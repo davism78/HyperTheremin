@@ -1,10 +1,9 @@
 package graphics;
 
+import static graphics.ThereminMode.PLAY;
 import leapControl.HandData;
 
 import org.newdawn.slick.TrueTypeFont;
-
-import static graphics.ThereminMode.*;
 
 public class GraphicsModel {
 	
@@ -14,24 +13,25 @@ public class GraphicsModel {
 	// each hand should have 
 	private HandData pitchHand;
 	private HandData levelHand;
-
-	// These will be deprecated
-	private double pitchValue;
-	private double volumeLevel;
 	
 	private TuningData tuningData;
 	private ThereminMode currentMode;
+	
+	// MainMenu
+	private MainMenuData menuData;
+	
+	
 
 	public GraphicsModel() {
-		pitchValue = GraphicsUtils.DEFAULT_VAL;
-		volumeLevel = GraphicsUtils.DEFAULT_VAL;
 		tuningData = new TuningData();
+		menuData = new MainMenuData();
 		
 		pitchHand = new HandData(0,0);
 		levelHand = new HandData(0,0);
 
 		// default to play mode
-		currentMode = PLAYMODE;
+		currentMode = PLAY;
+		
 	}
 	
 	public void setRightHand(HandData data){
@@ -101,5 +101,11 @@ public class GraphicsModel {
 	
 	public double getScale() {
 		return this.tuningData.getScale();
+	}
+
+	// Main Menu methods
+	
+	public MainMenuData getMenuData() {
+		return menuData;
 	}
 }

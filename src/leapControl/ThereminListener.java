@@ -180,24 +180,37 @@ public class ThereminListener extends Listener {
         assert(gests.count() <= 1);
         
         if (gests.count() > 0){
-            // state change triggered
-            printDebug("STATE TRANSFER: GESTURE SEEN", 1);
             
             Gesture gest = gests.get(0);
-            
-            if (gest.type() == Gesture.Type.TYPE_SCREEN_TAP){
-                // tune/play mode transition
-                if (oldmode == PLAYMODE){
-                    graphicsModel.setMode(TUNEMODE);
-                    // mute sound
-                    pitchConnection.sendPitch(0, 0);
-                } 
-                else if (oldmode == TUNEMODE)
-                    graphicsModel.setMode(PLAYMODE);
-                // noop in RECORDMODE
-            } else if (gest.type() == Gesture.Type.TYPE_KEY_TAP){
+            switch(gest.type()) {
+            case TYPE_CIRCLE:
+            	// state change triggered
+            	printDebug("STATE TRANSFER: GESTURE SEEN", 1);
+
+            	// Get the CircleGesture and check if a circle has been made
+            	CircleGesture circleGest = new CircleGesture(gest);
+            	if (circleGest.progress() > 1.0){
+            		graphicsModel.setMode(MENU);
+                	
+                    // tune/play mode transition
+                    if (oldmode == PLAY){
+                        // mute sound
+                        pitchConnection.sendPitch(0, 0);
+                    } 
+            	}
+            	break;
+            case TYPE_KEY_TAP:
                 // record/play not implemented
+            	break;
+            case TYPE_SCREEN_TAP:
+            	if(oldmode == MENU) {
+            		graphicsModel.setMode(graphicsModel.getMenuData().getSelectedState());
+            	}
+            	break;
+            default:
+            	printDebug("NON CIRCLE OR KEY TAP GESTURE", 1);
             }
+            
         }
 
         /*
@@ -207,16 +220,26 @@ public class ThereminListener extends Listener {
         
         ThereminMode newmode = graphicsModel.getMode();
         
-        if (newmode == PLAYMODE) {
+        switch(newmode) {
+        case PLAY:
             // doPlayMode should handle all actions in playmodel
             doPlayMode(frame);
-        } else if (newmode == TUNEMODE){
+        	break;
+        case TUNE:
             // doTuneMode should handle tuning
             doTuneMode(frame);
+        	break;
+        case MENU:
+        	doMenuMode(frame);
+        	break;
+        case EXIT:
+        	System.exit(0);
+        default:
+        	break;
         }
     }
-    
-    /*
+
+	/*
      * This method handles all behavior for the main play state of the theremin.
      * 1. evaluate number of hands and their functions
      * 2. Process hand data into usable data
@@ -310,5 +333,16 @@ public class ThereminListener extends Listener {
                 printDebug("SCALE: " + octave, 1);
             }
         }
+    }
+    
+    /*
+     * Defines the behavior of the MainMenu
+     * 1. get x,y position of hand
+     * 2. send to model for updating
+     */
+    private void doMenuMode(Frame frame) {
+    	Vector fingerPos = frame.hands().rightmost().fingers().rightmost().tipPosition();
+    	graphicsModel.getMenuData().updateMainMenu(fingerPos.getX(), fingerPos.getY());
+    	
     }
 }

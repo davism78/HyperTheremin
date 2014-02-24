@@ -26,6 +26,7 @@ class Theremin {
 		// Have the sample theremin receive events from the controller
 		
 		controller.enableGesture(Gesture.Type.TYPE_SCREEN_TAP); // for tuning
+		controller.enableGesture(Gesture.Type.TYPE_CIRCLE);     // for tuning
 		controller.enableGesture(Gesture.Type.TYPE_KEY_TAP);    // for recording
 		controller.addListener(listener);
 
