@@ -1,6 +1,9 @@
 package leapControl;
 
+import java.util.Collections;
+
 import graphics.GraphicsModel;
+import graphics.GraphicsUtils;
 import graphics.ThereminMode;
 
 import com.leapmotion.leap.*;
@@ -14,7 +17,7 @@ public class ThereminListener extends Listener {
     public static final int DEBUG = 1;
 
     private static final double OFFSET = 25.0; // Leap motion min sensitivity
-    private static final double MAXFREQ = 5000.0; // freq when touching
+    public static final double MAXFREQ = 5000.0; // freq when touching
                                                    // antennae
 
     private static final double ANTENNAE = 350.0; // the distance of the virtual
@@ -102,13 +105,16 @@ public class ThereminListener extends Listener {
         // SCALE is used to tune the pitch scale
         double tone = MAXFREQ * Math.pow(.5, position / graphicsModel.getScale());
 
-        // 18000 Hz is limit on pitch
-        if (tone > 18000.0) {
-            tone = 18000.0;
+        // limit the pitch
+        if (tone > MAXFREQ) {
+            tone = MAXFREQ;
         }
 
+        if(GraphicsUtils.QUANTIZED) {
+        	tone = quantizeTone(tone);
+        }
+        
         // communicate with graphics
-        // TODO: needs to pass position
         HandData data = new HandData(tone, max);
         graphicsModel.setRightHand(data);
         // return value
@@ -280,8 +286,7 @@ public class ThereminListener extends Listener {
         
         tone = getTone(right);
         level = getLevel(left);
-
-        // TODO: update the graphics model
+                
         /*
          * 3. Now lets send the audio data to PureData,
          * tone and level handled by sendPitch
@@ -296,7 +301,16 @@ public class ThereminListener extends Listener {
         }
     }
     
-    /*
+    private double quantizeTone(double tone) {
+    	int index = Collections.binarySearch(GraphicsUtils.notes, tone);
+    	if(index < 0) {
+    		return GraphicsUtils.notes.get(Math.abs(index - 1));
+    	} else {
+    		return GraphicsUtils.notes.get(index);
+    	}
+	}
+
+	/*
      * This method handles behevior of instrument in tuning state
      * 1. decide if there is a hand shown
      * 2. decide if it has multiple fingers
