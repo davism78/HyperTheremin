@@ -139,7 +139,11 @@ public class ThereminListener extends Listener {
 
         Vector v = hand.fingers().get(0).tipPosition();
         float Yval = v.getY();
-
+        if(Yval > 660) {
+        	Yval = 660;
+        } else if( Yval < OFFSET) {
+        	Yval = (float) (OFFSET + 1);
+        }
         printDebug("Y VAL: " + Yval);
 
         // Volume formula = C * log(height - offset)
@@ -149,12 +153,11 @@ public class ThereminListener extends Listener {
         double level = 14 * Math.log(Yval - OFFSET);
 
         // 100 db will be the limit on volume
-        if (!(level <= 100.0)) {
+        if (level > 100.0) {
             level = 100.0;
         }
 
         // communicate with graphics
-        // TODO: needs to pass position
         HandData data = new HandData(level, Yval);
         graphicsModel.setLeftHand(data);
         // return value
@@ -304,10 +307,10 @@ public class ThereminListener extends Listener {
     private double quantizeTone(double tone) {
     	int index = Collections.binarySearch(GraphicsUtils.notes, tone);
     	if(index < 0) {
-    		return GraphicsUtils.notes.get(Math.abs(index - 1));
-    	} else {
-    		return GraphicsUtils.notes.get(index);
+    		index = Math.abs(index) - 1;
     	}
+    	return GraphicsUtils.notes.get(index);
+    	
 	}
 
 	/*

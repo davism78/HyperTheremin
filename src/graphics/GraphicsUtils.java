@@ -28,6 +28,7 @@ public class GraphicsUtils {
 			notes2.add(val);
 			val *= Math.pow(2, 1.0/12.0);
 		}
+		notes2.add(val);
 		notes = Collections.unmodifiableList(notes2);
 	}
 	
