@@ -1,6 +1,5 @@
 package graphics;
 
-import static graphics.ThereminMode.PLAY;
 import leapControl.HandData;
 
 import org.newdawn.slick.TrueTypeFont;
@@ -27,8 +26,8 @@ public class GraphicsModel {
 		pitchHand = new HandData(0,0);
 		levelHand = new HandData(0,0);
 
-		// default to play mode
-		currentMode = PLAY;
+		// default to menu mode
+		currentMode = ThereminMode.MENU;
 		
 	}
 	

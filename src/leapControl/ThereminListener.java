@@ -11,10 +11,10 @@ import com.leapmotion.leap.*;
 import static graphics.ThereminMode.*;
 
 public class ThereminListener extends Listener {
-    private static final double DEFAULT_SCALE = 40.0;
+    private static final double DEFAULT_SCALE = 100.0;
 
 	// make this higher for more info
-    public static final int DEBUG = 1;
+    public static final int DEBUG = 0;
 
     private static final double OFFSET = 25.0; // Leap motion min sensitivity
     public static final double MAXFREQ = 5000.0; // freq when touching
@@ -341,8 +341,10 @@ public class ThereminListener extends Listener {
                 graphicsModel.setLeftAndRightTuningFingers(leftpos, rightpos);
                 
                 // now calculate the difference between tips
+                // this is multiplied by 1.5 to make the scale range 
+                // from 30 to 225
                 // TODO: should this look at more than one axis?
-                double octave = Math.abs(leftpos - rightpos);
+                double octave = 1.5 * Math.abs(leftpos - rightpos);
                 
                 /*
                  * If we assign SCALE to be the distance between fingers, our 

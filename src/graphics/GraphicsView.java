@@ -42,7 +42,7 @@ public class GraphicsView {
 
 		} catch (LWJGLException e) {
 			e.printStackTrace();
-			System.exit(0);
+			//System.exit(0);
 		}
 		
 		try {
@@ -146,21 +146,44 @@ public class GraphicsView {
 		 * Here we display the current Menu selections. This involves determining which state we
 		 * are currently connected to and adding a "selected" addition to the menu button name.
 		 */
+		int h = Display.getHeight();
+		int w = Display.getWidth();
+		int offset = 50;
+		
 		GL11.glColor3f(0, 0, 0);
 		if(model.getMenuData().getSelectedState() == ThereminMode.PLAY) {
 			GL11.glColor3f(1, 1, 1);
-			renderString(50, 296, "Play Selected");
+			renderString(offset, h / 4 - GraphicsUtils.FONT_SIZE, "Play Selected");
 			GL11.glColor3f(0, 0, 0);
 		} else {
-			renderString(50, 296, "Play");
+			renderString(offset, h / 4 - GraphicsUtils.FONT_SIZE, "Play");
 		}
 		if(model.getMenuData().getSelectedState() == ThereminMode.TUNE) {
 			GL11.glColor3f(1, 1, 1);
-			renderString(50 + Display.getWidth() / 2, 296, "Tune Selected");
+			renderString(offset + w / 2, h / 4 - GraphicsUtils.FONT_SIZE, "Tune Selected");
 			GL11.glColor3f(0, 0, 0);
 		} else {
-			renderString(50 + Display.getWidth() / 2, 296, "Tune");
+			renderString(offset + w / 2, h / 4 - GraphicsUtils.FONT_SIZE, "Tune");
 		}
+		if(model.getMenuData().getSelectedState() == ThereminMode.SETTINGS) {
+			GL11.glColor3f(1, 1, 1);
+			renderString(offset, 3 * h / 4 - GraphicsUtils.FONT_SIZE, "Settings Selected");
+			GL11.glColor3f(0, 0, 0);
+		} else {
+			renderString(offset, 3 * h / 4 - GraphicsUtils.FONT_SIZE, "Settings");
+		}
+		if(model.getMenuData().getSelectedState() == ThereminMode.EXIT) {
+			GL11.glColor3f(1, 1, 1);
+			renderString(offset + w / 2, 3 * h / 4 - GraphicsUtils.FONT_SIZE, "Exit Selected");
+			GL11.glColor3f(0, 0, 0);
+		} else {
+			renderString(offset + w / 2, 3 * h / 4 - GraphicsUtils.FONT_SIZE, "Exit");
+		}
+		
+		// Render the hand
+		renderTexture(finger, (float) model.getMenuData().getHandXPos(), (float) model.getMenuData().getHandYPos());
+		
+		
 		
 	}
 
@@ -183,16 +206,16 @@ public class GraphicsView {
 		if(model.getPitch() > 0.0) {
 			int pitchCoord = (int)Math.floor(model.getPitchPosition());
 			renderTexture(rightHand, pitchCoord, 250);
-		} else
-			System.out.println("NO PITCH");
-		
+		} else {
+			//System.out.println("NO PITCH");
+		}
 		// render volume hand
 		if(model.getVolume() > 0.0){
 			int volumeCoord = (int) Math.floor(model.getVolumePosition());
 			renderTexture(leftHand, 50, volumeCoord);
-		} else
-			System.out.println("NO VOL");
-		
+		} else {
+			//System.out.println("NO VOL");
+		}
 		GL11.glColor3f(1, 1, 1);
 
 		renderString(50, 50, "Pitch: " + model.getPitch());
@@ -215,7 +238,7 @@ public class GraphicsView {
 	}
 	
 	private void renderLine(float x, float y, float x2, float y2) {
-		GL11.glBegin(GL11.GL_QUADS);
+		GL11.glBegin(GL11.GL_LINE_STRIP);
 		GL11.glVertex2f(x, y);
 		GL11.glVertex2f(x2, y2);
 		GL11.glEnd();

@@ -33,14 +33,15 @@ public class GraphicsUtils {
 	}
 	
 	
+	public static final int FONT_SIZE = 24;
 	private static final String DEFAULT_FONT = "Times New Roman";
-
+	
 
 	private static TrueTypeFont font = null;
 
 	public static TrueTypeFont getDefaultFont() {
 		if(font == null) {
-			Font awtFont = new Font(DEFAULT_FONT, Font.BOLD, 24);
+			Font awtFont = new Font(DEFAULT_FONT, Font.BOLD, FONT_SIZE);
 			font = new TrueTypeFont(awtFont, false);
 		}
 		return font;
