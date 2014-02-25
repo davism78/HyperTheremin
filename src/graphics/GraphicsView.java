@@ -218,8 +218,8 @@ public class GraphicsView {
 		}
 		GL11.glColor3f(1, 1, 1);
 
-		renderString(50, 50, "Pitch: " + model.getPitch());
-		renderString(50, 75, "Volume: " + model.getVolume());
+		renderString(50, 50, "Pitch: " + roundedFloat(model.getPitch()));
+		renderString(50, 75, "Volume: " + roundedFloat(model.getVolume()));
 	}
 	
 	private void renderTexture(Texture tex, float topLeftX, float topLeftY) {
@@ -247,6 +247,10 @@ public class GraphicsView {
 	private void renderString(float x, float y, String message) {
 		
 		model.getFont().drawString(x, y, message);
+	}
+	
+	private String roundedFloat(double x) {
+		return ((int) (x * 100)) / 100.0 + ""; 
 	}
 	
 	/**

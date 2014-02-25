@@ -34,7 +34,7 @@ public class GraphicsUtils {
 	
 	
 	public static final int FONT_SIZE = 24;
-	private static final String DEFAULT_FONT = "Times New Roman";
+	private static final String DEFAULT_FONT = "Monaco";
 	
 
 	private static TrueTypeFont font = null;
