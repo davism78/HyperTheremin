@@ -20,8 +20,8 @@ public class GraphicsView {
 	private GraphicsModel model;
 	private Texture background;
 	private Texture leftHand;
-	private Texture rightHand;
-	private Texture finger;
+	private Texture rightFinger;
+	private Texture leftFinger;
 	
 	private boolean isCreated;
 	
@@ -47,9 +47,9 @@ public class GraphicsView {
 		
 		try {
 			background = TextureLoader.getTexture("JPG", ResourceLoader.getResourceAsStream("res/theremin.jpg"));
-			leftHand = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/hand_64.png"), false);
-			rightHand = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/hand_64.png"), true);
-			finger = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/finger_64.png"));
+			leftHand = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/hand_64.png"));
+			rightFinger = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/finger_64.png"));
+			leftFinger = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/finger_left_64.png"));
 			Display.setIcon(new ByteBuffer[] {
                     new ImageIOImageData().imageToByteBuffer(ImageIO.read(new File("res/icon_16.png")), false, false, null),
                     new ImageIOImageData().imageToByteBuffer(ImageIO.read(new File("res/icon_32.png")), false, false, null)
@@ -180,8 +180,8 @@ public class GraphicsView {
 			renderString(offset + w / 2, 3 * h / 4 - GraphicsUtils.FONT_SIZE, "Exit");
 		}
 		
-		// Render the hand
-		renderTexture(finger, (float) model.getMenuData().getHandXPos(), (float) model.getMenuData().getHandYPos());
+		// Render the right finger
+		renderTexture(rightFinger, (float) model.getMenuData().getHandXPos(), (float) model.getMenuData().getHandYPos());
 		
 		
 		
@@ -194,8 +194,8 @@ public class GraphicsView {
 		double scale = model.getScale();
 		float leftFinger = (float) (Display.getWidth() / 2 - (scale / 2));
 		float rightFinger = (float) (Display.getWidth() / 2 + (scale / 2));
-		renderTexture(finger, leftFinger, 250);
-		renderTexture(finger, rightFinger, 250);
+		renderTexture(this.leftFinger, leftFinger, 250);
+		renderTexture(this.rightFinger, rightFinger, 250);
 		
 		
 		renderString(50, 50, "Tuning Scale: " + scale);
@@ -205,7 +205,7 @@ public class GraphicsView {
 		// render pitch hand
 		if(model.getPitch() > 0.0) {
 			int pitchCoord = (int)Math.floor(model.getPitchPosition());
-			renderTexture(rightHand, pitchCoord, 250);
+			renderTexture(rightFinger, pitchCoord, 250);
 		} else {
 			//System.out.println("NO PITCH");
 		}
