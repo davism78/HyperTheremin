@@ -1,9 +1,10 @@
 package graphics;
 
+import java.util.Collections;
+
 import leapControl.HandData;
 
 import org.newdawn.slick.TrueTypeFont;
-
 public class GraphicsModel {
 	
 	private TrueTypeFont font;
