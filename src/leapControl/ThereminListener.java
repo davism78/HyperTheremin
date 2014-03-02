@@ -17,7 +17,7 @@ public class ThereminListener extends Listener {
     public static final int DEBUG = 0;
 
     private static final double OFFSET = 25.0; // Leap motion min sensitivity
-    public static final double MAXFREQ = 5000.0; // freq when touching
+    public static final double MAXFREQ = 2000.0; // freq when touching
                                                    // antennae
 
     private static final double ANTENNAE = 350.0; // the distance of the virtual
@@ -108,10 +108,6 @@ public class ThereminListener extends Listener {
         // limit the pitch
         if (tone > MAXFREQ) {
             tone = MAXFREQ;
-        }
-
-        if(GraphicsUtils.QUANTIZED) {
-        	tone = quantizeTone(tone);
         }
         
         // communicate with graphics
@@ -303,15 +299,6 @@ public class ThereminListener extends Listener {
             printDebug("ERROR: message did not send");
         }
     }
-    
-    private double quantizeTone(double tone) {
-    	int index = Collections.binarySearch(GraphicsUtils.notes, tone);
-    	if(index < 0) {
-    		index = Math.abs(index) - 1;
-    	}
-    	return GraphicsUtils.notes.get(index);
-    	
-	}
 
 	/*
      * This method handles behevior of instrument in tuning state

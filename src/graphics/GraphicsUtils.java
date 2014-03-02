@@ -20,6 +20,7 @@ public class GraphicsUtils {
 	public static final boolean QUANTIZED = true;
 
 	public static final List<Double> notes;
+	public static final String[] noteNames;
 	
 	static {
 		List<Double> notes2 = new ArrayList<Double>();
@@ -30,6 +31,9 @@ public class GraphicsUtils {
 		}
 		notes2.add(val);
 		notes = Collections.unmodifiableList(notes2);
+		noteNames = new String[] {
+			"C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B"
+		};
 	}
 	
 	
