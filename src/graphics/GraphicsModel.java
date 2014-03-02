@@ -19,6 +19,9 @@ public class GraphicsModel {
 	// MainMenu
 	private MainMenuData menuData;
 	
+	// Recording
+    private boolean recording;
+	
 	public GraphicsModel() {
 		tuningData = new TuningData();
 		menuData = new MainMenuData();
@@ -28,6 +31,7 @@ public class GraphicsModel {
 
 		// default to menu mode
 		currentMode = ThereminMode.MENU;
+		recording = true;
 		
 	}
 	
@@ -125,5 +129,17 @@ public class GraphicsModel {
 	
 	public MainMenuData getMenuData() {
 		return menuData;
+	}
+	
+	/******************************************
+	 * Recording methods
+	 ******************************************/
+	
+	public boolean isRecording() {
+		return recording;
+	}
+	
+	public void flipRecording() {
+		recording = !recording;
 	}
 }

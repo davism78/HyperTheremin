@@ -25,10 +25,14 @@ public class ThereminListener extends Listener {
 
     private OSCConnection pitchConnection;
     private GraphicsModel graphicsModel;
+    
+    // default file to record to
+    private MusicRecorder recorder;
 
     public ThereminListener(GraphicsModel model) {
         this.graphicsModel = model;
         this.graphicsModel.setScale(DEFAULT_SCALE); // default initial value
+        this.recorder = new MusicRecorder(GraphicsUtils.DEFAULT_RECORD_FILE);
     }
 
     public void onInit(Controller controller) {
@@ -212,7 +216,7 @@ public class ThereminListener extends Listener {
             	}
             	break;
             case TYPE_KEY_TAP:
-                // record/play not implemented
+                // turn on/off recording
             	break;
             case TYPE_SCREEN_TAP:
             	if(oldmode == MENU) {
@@ -256,6 +260,7 @@ public class ThereminListener extends Listener {
      * 1. evaluate number of hands and their functions
      * 2. Process hand data into usable data
      * 3. Send this data to audio synthesis
+     * 4. Record (if enabled)
      */
     private void doPlayMode(Frame frame){
         /*
@@ -302,6 +307,14 @@ public class ThereminListener extends Listener {
         if (!pitchSent) {
             printDebug("ERROR: message did not send");
         }
+        
+        /*
+         * 4. If the audio is to be recorded, record it.
+         */
+        if(graphicsModel.isRecording()) {
+        	recorder.record(tone, level);
+        }
+        
     }
     
     private double quantizeTone(double tone) {
