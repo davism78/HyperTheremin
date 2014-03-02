@@ -73,6 +73,19 @@ public class GraphicsModel {
 	public void setPitch(double pitch){
 		pitchHand.setData(pitch);
 	}
+	
+	public String getPitchString() {
+		 int pitchIndex = quantizeToneIndex(getPitch());
+		 return GraphicsUtils.noteNames[pitchIndex % 12] + " " + pitchIndex / 12;
+	}
+	
+	private int quantizeToneIndex(double tone) {
+		 int index = Collections.binarySearch(GraphicsUtils.notes, tone);
+		 if(index < 0) {
+		 	index = Math.abs(index) - 1;
+		 }
+		 return index;
+	}
 
 	public double getVolume() {
 		return levelHand.getData();
