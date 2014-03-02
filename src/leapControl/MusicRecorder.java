@@ -9,7 +9,7 @@ import java.nio.ByteBuffer;
 public class MusicRecorder {
 	private FileOutputStream output;
 
-	private static final int ENTRY_SIZE = 16;
+	public static final int ENTRY_SIZE = 16;
 
 	public MusicRecorder(String fileName) {
 		try {

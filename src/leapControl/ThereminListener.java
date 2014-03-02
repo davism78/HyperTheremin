@@ -311,7 +311,7 @@ public class ThereminListener extends Listener {
         /*
          * 4. If the audio is to be recorded, record it.
          */
-        if(graphicsModel.isRecording()) {
+        if(graphicsModel.isRecording() && level > 0.0) {
         	recorder.record(tone, level);
         }
         
