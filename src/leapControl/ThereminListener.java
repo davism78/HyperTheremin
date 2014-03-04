@@ -1,14 +1,25 @@
 package leapControl;
 
-import java.util.Collections;
-
+import static graphics.ThereminMode.MENU;
+import static graphics.ThereminMode.PLAY;
+import static graphics.ThereminMode.PLAYBACK;
 import graphics.GraphicsModel;
 import graphics.GraphicsUtils;
 import graphics.ThereminMode;
+import main.Theremin;
+import java.util.Collections;
 
-import com.leapmotion.leap.*;
-
-import static graphics.ThereminMode.*;
+import com.leapmotion.leap.CircleGesture;
+import com.leapmotion.leap.Controller;
+import com.leapmotion.leap.Finger;
+import com.leapmotion.leap.FingerList;
+import com.leapmotion.leap.Frame;
+import com.leapmotion.leap.Gesture;
+import com.leapmotion.leap.GestureList;
+import com.leapmotion.leap.Hand;
+import com.leapmotion.leap.HandList;
+import com.leapmotion.leap.Listener;
+import com.leapmotion.leap.Vector;
 
 public class ThereminListener extends Listener {
     private static final double DEFAULT_SCALE = 100.0;
@@ -28,11 +39,13 @@ public class ThereminListener extends Listener {
     
     // default file to record to
     private MusicRecorder recorder;
+    private MusicReader reader;
 
     public ThereminListener(GraphicsModel model) {
         this.graphicsModel = model;
         this.graphicsModel.setScale(DEFAULT_SCALE); // default initial value
         this.recorder = new MusicRecorder(GraphicsUtils.DEFAULT_RECORD_FILE);
+        this.reader = new MusicReader(GraphicsUtils.DEFAULT_RECORD_FILE);
     }
 
     public void onInit(Controller controller) {
@@ -209,7 +222,7 @@ public class ThereminListener extends Listener {
             		graphicsModel.setMode(MENU);
                 	
                     // tune/play mode transition
-                    if (oldmode == PLAY){
+                    if (oldmode == PLAY || oldmode == PLAYBACK){
                         // mute sound
                         pitchConnection.sendPitch(0, 0);
                     } 
@@ -217,6 +230,7 @@ public class ThereminListener extends Listener {
             	break;
             case TYPE_KEY_TAP:
                 // turn on/off recording
+            	// TODO: Should destroy previous file if it exists.
             	break;
             case TYPE_SCREEN_TAP:
             	if(oldmode == MENU) {
@@ -248,8 +262,11 @@ public class ThereminListener extends Listener {
         case MENU:
         	doMenuMode(frame);
         	break;
+        case PLAYBACK:
+        	doPlayback();
+        	break;
         case EXIT:
-        	System.exit(0);
+        	Theremin.exit();
         default:
         	break;
         }
@@ -380,4 +397,33 @@ public class ThereminListener extends Listener {
     	graphicsModel.getMenuData().updateMainMenu(fingerPos.getX(), fingerPos.getY());
     	
     }
+    
+	private void doPlayback() {
+		if(reader.next()) {
+			double tone = reader.getPitch();
+			double level = reader.getVolume();
+			/*
+			 * Update graphics
+			 */
+			graphicsModel.setPitch(tone);
+			graphicsModel.setVolume(level);
+			
+			/*
+			 * Send data to OSC
+			 */
+			boolean pitchSent = pitchConnection.sendPitch(tone, level);
+	        if (!pitchSent) {
+	            printDebug("ERROR: message did not send");
+	        }
+		} else {
+			// restart (loop playback)
+			reader.restart();
+		}
+	}
+	
+	public void cleanup() {
+		recorder.cleanup();
+		reader.cleanup();
+	}
+
 }

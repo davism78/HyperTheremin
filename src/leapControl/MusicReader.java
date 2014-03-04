@@ -85,4 +85,12 @@ public class MusicReader {
 			System.out.println("Pitch: " + pitch + "Volume: " + volume);
 		}
 	}
+
+	public void cleanup() {
+		try {
+			input.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

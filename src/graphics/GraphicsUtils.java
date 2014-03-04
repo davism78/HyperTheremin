@@ -17,7 +17,7 @@ public class GraphicsUtils {
 	public static final String TITLE = "Theremin";
 	public static final boolean FULL_SCREEN = false;
 	public static final double DEFAULT_VAL = 0.0;
-	public static final boolean QUANTIZED = true;
+	public static final boolean QUANTIZED = false;
 	public static final String DEFAULT_RECORD_FILE = "sample.theremin";
 
 	public static final List<Double> notes;

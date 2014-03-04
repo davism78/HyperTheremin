@@ -43,7 +43,7 @@ public class MainMenuData {
 			if(y < windowLineY) {
 				selectedState = ThereminMode.PLAY;
 			} else {
-				selectedState = ThereminMode.SETTINGS; // SETTINGS
+				selectedState = ThereminMode.PLAYBACK; // SETTINGS
 			}
 		} else {
 			if(y < windowLineY) {

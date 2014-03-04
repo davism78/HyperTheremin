@@ -113,6 +113,7 @@ public class GraphicsView {
 		
 		switch(model.getMode()) {
 		case PLAY:
+		case PLAYBACK:
 			renderPlay();
 			break;
 		case TUNE:
@@ -165,7 +166,7 @@ public class GraphicsView {
 		} else {
 			renderString(offset + w / 2, h / 4 - GraphicsUtils.FONT_SIZE, "Tune");
 		}
-		if(model.getMenuData().getSelectedState() == ThereminMode.SETTINGS) {
+		if(model.getMenuData().getSelectedState() == ThereminMode.PLAYBACK) { // SETTINGS
 			GL11.glColor3f(1, 1, 1);
 			renderString(offset, 3 * h / 4 - GraphicsUtils.FONT_SIZE, "Settings Selected");
 			GL11.glColor3f(0, 0, 0);

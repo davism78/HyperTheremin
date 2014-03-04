@@ -37,4 +37,12 @@ public class MusicRecorder {
 			e.printStackTrace();
 		}
 	}
+
+	public void cleanup() {
+		try {
+			output.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

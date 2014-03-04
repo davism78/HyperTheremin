@@ -1,3 +1,4 @@
+package main;
 
 import graphics.GraphicsModel;
 import graphics.GraphicsView;
@@ -9,11 +10,17 @@ import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Gesture;
 
 
-class Theremin {
+public class Theremin {
+	
+	private static GraphicsView gui;
+	private static Controller controller;
+	private static ThereminListener listener;
+	
+	
 	public static void main(String[] args) throws LWJGLException {
 		// Setup the display
 		GraphicsModel graphics = new GraphicsModel();
-		GraphicsView gui = new GraphicsView(graphics);
+		gui = new GraphicsView(graphics);
 		
 		// TODO: auto start PD with our pd file
 		// we can use java.io.runtime:
@@ -21,8 +28,8 @@ class Theremin {
 		// Process ps = rt.exec("path/to/pd.exe path/to/src.pd");
 		
 		// Create a theremin listener and controller
-		ThereminListener listener = new ThereminListener(graphics);
-		Controller controller = new Controller();
+		listener = new ThereminListener(graphics);
+		controller = new Controller();
 		// Have the sample theremin receive events from the controller
 		
 		controller.enableGesture(Gesture.Type.TYPE_SCREEN_TAP); // for tuning
@@ -35,8 +42,13 @@ class Theremin {
 		gui.runDisplay();
 
 		// cleanup
-		controller.removeListener(listener);
-		gui.cleanup();
+		exit();
 	}
 
+	public static void exit() {
+		listener.cleanup();
+		controller.removeListener(listener);
+		gui.cleanup();
+		
+	}
 }
