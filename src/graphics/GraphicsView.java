@@ -24,6 +24,7 @@ public class GraphicsView {
 	private Texture leftFinger;
 	
 	private boolean isCreated;
+	private boolean stopRequested;
 	
 	public GraphicsView(GraphicsModel model) {
 		this.model = model;
@@ -31,6 +32,7 @@ public class GraphicsView {
 		prepareGraphics();
 		model.setupFont();
 		isCreated = true;
+		stopRequested = false;
 	}
 
 	private void setupDisplay() {
@@ -94,7 +96,7 @@ public class GraphicsView {
 	 * When the method returns, the user will have requested to close.
 	 */
 	public void runDisplay() {
-		while(!Display.isCloseRequested()) {
+		while(!Display.isCloseRequested() && !stopRequested) {
 
 			if(Display.wasResized()) {
 				resize();
@@ -105,6 +107,7 @@ public class GraphicsView {
 			Display.update();
 			Display.sync(60);
 		}
+		Display.destroy();
 	}
 
 	private void render() {
@@ -221,6 +224,7 @@ public class GraphicsView {
 
 		renderString(50, 50, "Pitch: " + model.getPitchString());
 		renderString(50, 75, "Volume: " + roundedFloat(model.getVolume()));
+		renderString(50, 25, "Recording: " + model.isRecording());
 	}
 	
 	private void renderTexture(Texture tex, float topLeftX, float topLeftY) {
@@ -259,7 +263,7 @@ public class GraphicsView {
 	 */
 	public void cleanup() {
 		if(isCreated) {
-			Display.destroy();
+			stopRequested = true;
 			isCreated = false;
 		}
 	}

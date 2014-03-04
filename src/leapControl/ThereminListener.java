@@ -231,6 +231,9 @@ public class ThereminListener extends Listener {
             case TYPE_KEY_TAP:
                 // turn on/off recording
             	// TODO: Should destroy previous file if it exists.
+            	if(oldmode == PLAY) {
+            		graphicsModel.flipRecording();
+            	}
             	break;
             case TYPE_SCREEN_TAP:
             	if(oldmode == MENU) {

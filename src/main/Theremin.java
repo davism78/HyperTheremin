@@ -15,7 +15,7 @@ public class Theremin {
 	private static GraphicsView gui;
 	private static Controller controller;
 	private static ThereminListener listener;
-	
+	private static boolean clean = false;
 	
 	public static void main(String[] args) throws LWJGLException {
 		// Setup the display
@@ -42,13 +42,15 @@ public class Theremin {
 		gui.runDisplay();
 
 		// cleanup
-		exit();
+		if(!clean) {
+			exit();
+		}
 	}
 
 	public static void exit() {
 		listener.cleanup();
 		controller.removeListener(listener);
 		gui.cleanup();
-		System.exit(0);
+		clean = true;
 	}
 }
