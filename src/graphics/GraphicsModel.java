@@ -3,6 +3,7 @@ package graphics;
 import java.util.Collections;
 
 import leapControl.HandData;
+import leapControl.ThereminListener;
 
 import org.newdawn.slick.TrueTypeFont;
 public class GraphicsModel {
@@ -112,6 +113,16 @@ public class GraphicsModel {
 		return slope * (levelHand.getPos() - 600.0);
 	}
 	
+	public double pitchToMilli(double pitch) {
+		double log = Math.log(pitch / ThereminListener.MAXFREQ) / Math.log(.5);
+		return ThereminListener.ANTENNAE - (getScale() * log);
+	}
+	
+	public double volumeToMilli(double volume) {
+		double exp = Math.pow(Math.E, volume / 14);
+		return exp + ThereminListener.OFFSET;
+	}
+	
 	/********************************************
 	 * Methods involved with tuning the theremin
 	 ********************************************/
@@ -151,6 +162,10 @@ public class GraphicsModel {
 	
 	public boolean isRecording() {
 		return recording;
+	}
+	
+	public void setRecording(boolean recording) {
+		this.recording = recording;
 	}
 	
 	public void flipRecording() {

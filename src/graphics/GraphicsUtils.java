@@ -19,7 +19,7 @@ public class GraphicsUtils {
 	public static final double DEFAULT_VAL = 0.0;
 	public static final boolean QUANTIZED = false;
 	public static final String DEFAULT_RECORD_FILE = "sample.theremin";
-	public static final boolean RECORD = true;
+	public static final boolean RECORD = false;
 
 	public static final List<Double> notes;
 	public static final String[] noteNames;

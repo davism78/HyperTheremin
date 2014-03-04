@@ -171,10 +171,10 @@ public class GraphicsView {
 		}
 		if(model.getMenuData().getSelectedState() == ThereminMode.PLAYBACK) { // SETTINGS
 			GL11.glColor3f(1, 1, 1);
-			renderString(offset, 3 * h / 4 - GraphicsUtils.FONT_SIZE, "Settings Selected");
+			renderString(offset, 3 * h / 4 - GraphicsUtils.FONT_SIZE, "Playback Selected"/*"Settings Selected"*/);
 			GL11.glColor3f(0, 0, 0);
 		} else {
-			renderString(offset, 3 * h / 4 - GraphicsUtils.FONT_SIZE, "Settings");
+			renderString(offset, 3 * h / 4 - GraphicsUtils.FONT_SIZE, "Playback"/*"Settings"*/);
 		}
 		if(model.getMenuData().getSelectedState() == ThereminMode.EXIT) {
 			GL11.glColor3f(1, 1, 1);

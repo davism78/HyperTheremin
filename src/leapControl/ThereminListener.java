@@ -27,11 +27,11 @@ public class ThereminListener extends Listener {
 	// make this higher for more info
     public static final int DEBUG = 0;
 
-    private static final double OFFSET = 25.0; // Leap motion min sensitivity
+    public static final double OFFSET = 25.0; // Leap motion min sensitivity
     public static final double MAXFREQ = 2000.0; // freq when touching
                                                    // antennae
 
-    private static final double ANTENNAE = 350.0; // the distance of the virtual
+    public static final double ANTENNAE = 350.0; // the distance of the virtual
                                                   // antennae from the origin
 
     private OSCConnection pitchConnection;
@@ -225,6 +225,7 @@ public class ThereminListener extends Listener {
                     if (oldmode == PLAY || oldmode == PLAYBACK){
                         // mute sound
                         pitchConnection.sendPitch(0, 0);
+                        graphicsModel.setRecording(false);
                     } 
             	}
             	break;
@@ -411,6 +412,11 @@ public class ThereminListener extends Listener {
 			graphicsModel.setPitch(tone);
 			graphicsModel.setVolume(level);
 			
+			HandData pitchData = new HandData(tone, graphicsModel.pitchToMilli(tone));
+	        graphicsModel.setRightHand(pitchData); 
+	        HandData volData = new HandData(level, graphicsModel.volumeToMilli(level));
+	        graphicsModel.setLeftHand(volData);
+	        
 			/*
 			 * Send data to OSC
 			 */
