@@ -49,6 +49,6 @@ public class Theremin {
 		listener.cleanup();
 		controller.removeListener(listener);
 		gui.cleanup();
-		
+		System.exit(0);
 	}
 }
