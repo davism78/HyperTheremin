@@ -33,6 +33,9 @@ public class ThereminListener extends Listener {
 
     public static final double ANTENNAE = 350.0; // the distance of the virtual
                                                   // antennae from the origin
+    private static final int MAXDEADFRAMES = 4;
+    
+    private int deadFrames = 0;
 
     private OSCConnection pitchConnection;
     private GraphicsModel graphicsModel;
@@ -93,11 +96,20 @@ public class ThereminListener extends Listener {
      */
     private double getTone(Hand hand/* FingerList fingers */) {
         if (hand == null){
+        	deadFrames++;
             // if we get here, there is no pitch hand in the frame
-            graphicsModel.setPitch(0);
-            return 0;
+        	if (deadFrames <= MAXDEADFRAMES){
+        		// play last known pitch
+        		
+        		return graphicsModel.getPitch();
+        		
+        	} else {
+        		graphicsModel.setPitch(0);
+            	return 0;
+        	}
         }
 
+        deadFrames = 0;
         FingerList figs = hand.fingers();
         if (figs.isEmpty()){
             // if we get here, there is no pitch hand in the frame
@@ -148,12 +160,22 @@ public class ThereminListener extends Listener {
      * scaling, this will be hardcoded
      */
     private double getLevel(Hand hand) {
+    	deadFrames++;
+        // if we get here, there is no level hand in the frame
         if (hand == null){
-            // if we get here, there is no level hand in the frame
-            graphicsModel.setVolume(0);
-            return 0;
+            // if we get here, there is no pitch hand in the frame
+        	if (deadFrames <= MAXDEADFRAMES){
+        		// play last known pitch
+        		
+        		return graphicsModel.getVolume();
+        	} else {
+        		graphicsModel.setPitch(0);
+            	return 0;
+        	}
+        
         }
 
+        deadFrames = 0;
         Vector v = hand.fingers().get(0).tipPosition();
         float Yval = v.getY();
         if(Yval > 660) {
