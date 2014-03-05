@@ -12,6 +12,8 @@ import com.illposed.osc.OSCPortOut;
 
 public class OSCConnection {
 
+	private static final String FILENAME = "recording.wav";
+	
 	private InetAddress remoteIP;
 	private int remotePort;
 	private OSCPortOut sender;
@@ -43,24 +45,29 @@ public class OSCConnection {
 
 	public boolean sendPitch(double tone, double level){
 		// Check for maximum allowed values
-
-		return sendOSCMessage("/note", new Float(tone), new Float(level));
+		Collection<Object> values = new ArrayList<Object>();
+		values.add(new Float(tone));
+		values.add(new Float(level));
+		return sendOSCMessage("/note", values);
 	}
 	
 	public boolean sendRecordOn(){
-		return sendOSCMessage("/recon", "bang", "bang");
+		Collection<Object> values = new ArrayList<Object>();
+		values.add(FILENAME);
+		return sendOSCMessage("/recon", values);
 	}
 	
 	public boolean sendRecordOff(){
-		return sendOSCMessage("/recoff", "bang", "bang");
+		Collection<Object> values = new ArrayList<Object>();
+		values.add(FILENAME);
+		return sendOSCMessage("/recoff", values);
 	}
 
-	private boolean sendOSCMessage(String address, Object value1, Object value2){
-		if(value1 == null || value2 == null)
+	private boolean sendOSCMessage(String address, Collection<Object> values){
+		if(values == null){
 			return false;
-		Collection<Object> values = new ArrayList<Object>();
-		values.add(value1);
-		values.add(value2);
+		}
+		
 		OSCMessage message = new OSCMessage(address, values);
 		try {
 			sender.send(message);
