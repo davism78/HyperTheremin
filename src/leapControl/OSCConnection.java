@@ -14,12 +14,10 @@ public class OSCConnection {
 
 	private InetAddress remoteIP;
 	private int remotePort;
-	private String nodeName;
 	private OSCPortOut sender;
 
-	public OSCConnection(int port, String name) {
+	public OSCConnection(int port) {
 		remotePort = port;
-		nodeName = name;
 		// The IP Address of the server (or listener) we would like to send to
 	  // For testing we will use the `getLocalHost` function to send to our
 	  // machine, but for using with different physical devices, use something
@@ -46,7 +44,15 @@ public class OSCConnection {
 	public boolean sendPitch(double tone, double level){
 		// Check for maximum allowed values
 
-		return sendOSCMessage(nodeName, new Float(tone), new Float(level));
+		return sendOSCMessage("/note", new Float(tone), new Float(level));
+	}
+	
+	public boolean sendRecordOn(){
+		return sendOSCMessage("/recon", "bang", "bang");
+	}
+	
+	public boolean sendRecordOff(){
+		return sendOSCMessage("/recoff", "bang", "bang");
 	}
 
 	private boolean sendOSCMessage(String address, Object value1, Object value2){
