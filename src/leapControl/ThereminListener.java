@@ -7,6 +7,7 @@ import graphics.GraphicsModel;
 import graphics.GraphicsUtils;
 import graphics.ThereminMode;
 import main.Theremin;
+
 import java.util.Collections;
 
 import com.leapmotion.leap.CircleGesture;
@@ -20,6 +21,7 @@ import com.leapmotion.leap.Hand;
 import com.leapmotion.leap.HandList;
 import com.leapmotion.leap.Listener;
 import com.leapmotion.leap.Vector;
+import java.io.File;
 
 public class ThereminListener extends Listener {
     private static final double DEFAULT_SCALE = 100.0;
@@ -36,6 +38,10 @@ public class ThereminListener extends Listener {
     
     // the number of dead frames to ignore before defaulting to 0
     private static final int MAXDEADFRAMES = 4;
+    
+    // Files to write recroding to
+	private static final String FILERECORD = "recording.wav";
+	private static final String FILEPLAY   = "playback.wav";
     
     private int deadPitchFrames = 0;
     private int deadLevelFrames = 0;
@@ -248,8 +254,9 @@ public class ThereminListener extends Listener {
                     if (oldmode == PLAY || oldmode == PLAYBACK){
                         // mute sound
                         pitchConnection.sendPitch(0, 0);
+                        // stop recording
                         graphicsModel.setRecording(false);
-                        pitchConnection.sendRecordOff();
+                        pitchConnection.sendRecordOff(FILEPLAY);
                     } 
             	}
             	break;
@@ -261,13 +268,20 @@ public class ThereminListener extends Listener {
             		
             		// check status and notify PD
             		if (graphicsModel.isRecording()){
-            			pitchConnection.sendRecordOn();
+            			// We are now recording, turn on recording
+            			pitchConnection.sendRecordOn(FILERECORD);
             		} else {
-            			pitchConnection.sendRecordOff();
+            			// We turned off recording
+            			pitchConnection.sendRecordOff(FILEPLAY);
+            			// turn off playback if on
+            			pitchConnection.sendPlayBackOff(FILEPLAY);
+            			// copy recording to secondary file
+            			//File file = new File();
             		}
             	}
             	break;
             case TYPE_SCREEN_TAP:
+            	// if we are in the menu, transfer to selected menu state
             	if(oldmode == MENU) {
             		graphicsModel.setMode(graphicsModel.getMenuData().getSelectedState());
             	}
@@ -298,6 +312,7 @@ public class ThereminListener extends Listener {
         	doMenuMode(frame);
         	break;
         case PLAYBACK:
+        	// TODO: remove this
         	doPlayback();
         	break;
         case EXIT:
@@ -422,6 +437,11 @@ public class ThereminListener extends Listener {
         }
     }
     
+    
+    /*
+     * TODO: we are moving to puredata based recording, this method and the PLAYBACK mode
+     * enum will not be used
+     */
     /*
      * Defines the behavior of the MainMenu
      * 1. get x,y position of hand

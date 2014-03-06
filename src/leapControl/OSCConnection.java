@@ -12,7 +12,6 @@ import com.illposed.osc.OSCPortOut;
 
 public class OSCConnection {
 
-	private static final String FILENAME = "recording.wav";
 	
 	private InetAddress remoteIP;
 	private int remotePort;
@@ -51,16 +50,28 @@ public class OSCConnection {
 		return sendOSCMessage("/note", values);
 	}
 	
-	public boolean sendRecordOn(){
+	public boolean sendRecordOn(String recordFile){
 		Collection<Object> values = new ArrayList<Object>();
-		values.add(FILENAME);
+		values.add(recordFile);
 		return sendOSCMessage("/recon", values);
 	}
 	
-	public boolean sendRecordOff(){
+	public boolean sendRecordOff(String playBackFile){
 		Collection<Object> values = new ArrayList<Object>();
-		values.add(FILENAME);
+		values.add(playBackFile);
 		return sendOSCMessage("/recoff", values);
+	}
+	
+	public boolean sendPlayBackOn(String playBackFile){
+		Collection<Object> values = new ArrayList<Object>();
+		values.add(playBackFile);
+		return sendOSCMessage("/playon", values);
+	}
+	
+	public boolean sendPlayBackOff(String playBackFile){
+		Collection<Object> values = new ArrayList<Object>();
+		values.add(playBackFile);
+		return sendOSCMessage("/playoff", values);
 	}
 
 	private boolean sendOSCMessage(String address, Collection<Object> values){
