@@ -1,4 +1,4 @@
-#N canvas 415 146 773 586 10;
+#N canvas 1660 531 773 586 10;
 #X declare -lib osc -lib mrpeach;
 #X obj 361 212 osc~;
 #X obj 452 92 unpackOSC;
@@ -8,9 +8,9 @@
 #X obj 361 162 unpack f f;
 #X obj 452 54 udpreceive 8000;
 #X obj 11 -30 hsl 500 15 20 2000 0 0 empty empty empty -2 -8 0 10 -262144
--1 -1 12100 1;
+-1 -1 19500 1;
 #X obj 11 -82 hsl 128 15 0 120 0 0 empty empty empty -2 -8 0 10 -262144
--1 -1 11300 1;
+-1 -1 0 1;
 #X text 523 -33 pitch;
 #X text 149 -84 volume;
 #X msg 120 224 connect localhost 8000;
@@ -76,13 +76,17 @@
 #X obj 587 357 readsf~ 2;
 #X msg 478 166 open recording.wav \, start;
 #X msg 610 212 open playback.wav \, start;
+#X obj 284 209 print vol;
+#X obj 269 265 print pitch;
 #X connect 0 0 3 0;
 #X connect 1 0 4 0;
 #X connect 1 0 27 0;
 #X connect 2 0 3 1;
 #X connect 3 0 18 0;
 #X connect 5 0 0 0;
+#X connect 5 0 41 0;
 #X connect 5 1 2 0;
+#X connect 5 1 40 0;
 #X connect 6 0 1 0;
 #X connect 7 0 16 0;
 #X connect 7 0 20 0;
@@ -117,5 +121,6 @@
 #X connect 35 0 14 0;
 #X connect 37 0 29 1;
 #X connect 37 1 29 1;
+#X connect 37 2 39 0;
 #X connect 38 0 26 0;
 #X connect 39 0 37 0;

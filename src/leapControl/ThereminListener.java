@@ -6,6 +6,7 @@ import static graphics.ThereminMode.PLAYBACK;
 import graphics.GraphicsModel;
 import graphics.GraphicsUtils;
 import graphics.ThereminMode;
+import main.TestClass;
 import main.Theremin;
 
 import java.util.Collections;
@@ -21,6 +22,7 @@ import com.leapmotion.leap.Hand;
 import com.leapmotion.leap.HandList;
 import com.leapmotion.leap.Listener;
 import com.leapmotion.leap.Vector;
+
 import java.io.File;
 
 public class ThereminListener extends Listener {
@@ -233,6 +235,7 @@ public class ThereminListener extends Listener {
         ThereminMode oldmode = graphicsModel.getMode();
         printDebug("STATE: " + oldmode, 5);
 
+        // FIXME: We dont know if there will only be one gesture!!!
         GestureList gests = frame.gestures();
         assert(gests.count() <= 1);
         
@@ -262,7 +265,6 @@ public class ThereminListener extends Listener {
             	break;
             case TYPE_KEY_TAP:
                 // turn on/off recording
-            	// TODO: Should destroy previous file if it exists.
             	if(oldmode == PLAY) {
             		graphicsModel.flipRecording();
             		
@@ -276,7 +278,9 @@ public class ThereminListener extends Listener {
             			// turn off playback if on
             			pitchConnection.sendPlayBackOff(FILEPLAY);
             			// copy recording to secondary file
-            			//File file = new File();
+            			if (!moveRecording()){
+            				System.out.println("MOVE NOT WORKY");
+            			}
             		}
             	}
             	break;
@@ -284,6 +288,8 @@ public class ThereminListener extends Listener {
             	// if we are in the menu, transfer to selected menu state
             	if(oldmode == MENU) {
             		graphicsModel.setMode(graphicsModel.getMenuData().getSelectedState());
+            	} else if (oldmode == PLAY){
+            		pitchConnection.sendPlayBackOn(FILEPLAY);
             	}
             	break;
             default:
@@ -320,6 +326,39 @@ public class ThereminListener extends Listener {
         default:
         	break;
         }
+    }
+    
+    /*
+     * move recording.wav to playback.wav.  Call this when recording is disabled
+     */
+    private boolean moveRecording(){
+    	String url = this.getClass().getResource("").getPath();
+
+		System.out.println(url);
+		
+		String newurl = url + "../../pd_src/";
+		
+		File file = new File(newurl + "recording.wav");
+		
+		try{
+			File newfile = new File(newurl + "playback.wav");
+			if(newfile.delete()){
+				System.out.println("File was deleted");
+			} else {
+				System.out.println("File is failed to delete!");
+			}
+			
+			
+			if(file.renameTo(newfile)){
+	    		System.out.println("File is moved successful!");
+			}else{
+	    		System.out.println("File is failed to move!");
+	    	}
+	 
+	    }catch(Exception e){
+	    	return false;
+	   	}
+		return true;
     }
 
 	/*
