@@ -259,6 +259,8 @@ public class ThereminListener extends Listener {
                         // stop recording
                         graphicsModel.setRecording(false);
                         pitchConnection.sendRecordOff(FILEPLAY);
+                        // stop playback
+                        pitchConnection.sendPlayBackOff(FILEPLAY);
                     } 
             	}
             	break;
@@ -276,6 +278,14 @@ public class ThereminListener extends Listener {
             			pitchConnection.sendRecordOff(FILEPLAY);
             			// turn off playback if on
             			pitchConnection.sendPlayBackOff(FILEPLAY);
+            			try {
+            			    /* This sleep is here to ensure that the two files are closed by
+            			     * Puredata before we try to delete/ copy over them.
+            			     */
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
             			// copy recording to secondary file
             			if (!moveRecording()){
             				System.out.println("MOVE NOT WORKY");
@@ -341,7 +351,7 @@ public class ThereminListener extends Listener {
 		
 		try{
 			File newfile = new File(newurl + "playback.wav");
-			if(newfile.delete()){
+			if(newfile.exists() && newfile.delete()){
 				System.out.println("File was deleted");
 			} else {
 				System.out.println("File is failed to delete!");

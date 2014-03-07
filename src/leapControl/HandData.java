@@ -7,7 +7,7 @@ public class HandData {
 	public HandData(double data, double position){
 		// sanity checks
 		assert(data >= 0);
-		assert(position >= 0);
+		//assert(position >= 0);
 		
 		this.data = data;
 		this.position = position;
