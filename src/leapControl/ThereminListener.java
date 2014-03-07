@@ -6,7 +6,6 @@ import static graphics.ThereminMode.PLAYBACK;
 import graphics.GraphicsModel;
 import graphics.GraphicsUtils;
 import graphics.ThereminMode;
-import main.TestClass;
 import main.Theremin;
 
 import java.util.Collections;
