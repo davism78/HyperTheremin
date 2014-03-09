@@ -1,4 +1,5 @@
 import com.illposed.osc.*;
+
 import java.net.*;
 
 public class OSC_test {
@@ -25,7 +26,8 @@ public class OSC_test {
 	    values1[1] = new Integer(75);
 	    
 	    // Bring the address and values together to form an OSCMessage
-	    OSCMessage message1 = new OSCMessage(address1, values1);
+	    @SuppressWarnings("deprecation")
+		OSCMessage message1 = new OSCMessage(address1, values1);
 	   
 	    // Send each message
 	    System.out.printf("Sending message1 to %s:%s at %s\n", remoteIP, remotePort, message1.getAddress());
