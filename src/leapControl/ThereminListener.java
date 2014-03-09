@@ -178,7 +178,7 @@ public class ThereminListener extends Listener {
         assert(figs != null);
         
         float Yval = figs.get(0).tipPosition().getY();
-        if(Yval > 660) {
+        if(Yval > 660) { // this is max leap motion Y sensitivity
         	Yval = 660;
         	//FIXME: Hardcoded image dimension!!!
         } else if(Yval < OFFSET) {
