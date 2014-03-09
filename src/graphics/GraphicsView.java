@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 
 import javax.imageio.ImageIO;
 
+import leapControl.ThereminListener;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -22,6 +24,8 @@ public class GraphicsView {
 	private Texture leftHand;
 	private Texture rightFinger;
 	private Texture leftFinger;
+	private Texture record;
+	private Texture play;
 	
 	private boolean isCreated;
 	private boolean stopRequested;
@@ -41,10 +45,11 @@ public class GraphicsView {
 			Display.create();
 			Display.setVSyncEnabled(true);
 			Display.setTitle(GraphicsUtils.TITLE);
+			//Display.setResizable(true);
 
 		} catch (LWJGLException e) {
 			e.printStackTrace();
-			//System.exit(0);
+
 		}
 		
 		try {
@@ -52,6 +57,8 @@ public class GraphicsView {
 			leftHand = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/hand_64.png"));
 			rightFinger = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/finger_64.png"));
 			leftFinger = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/finger_left_64.png"));
+			record = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/recording.png"));
+			play = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/playing.png"));
 			Display.setIcon(new ByteBuffer[] {
                     new ImageIOImageData().imageToByteBuffer(ImageIO.read(new File("res/icon_16.png")), false, false, null),
                     new ImageIOImageData().imageToByteBuffer(ImageIO.read(new File("res/icon_32.png")), false, false, null)
@@ -88,7 +95,12 @@ public class GraphicsView {
 	 * resizes the viewport on the Display to match the dimensions of the Display.
 	 */
 	private void resize() {
-		GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
+		
+		int width = Display.getWidth();
+		int height = Display.getHeight();
+		ThereminListener.printDebug("Width: " + width);
+		ThereminListener.printDebug("Height: "+ height);
+		GL11.glViewport(0, 0, width, height);
 	}
 
 	/**
@@ -224,7 +236,14 @@ public class GraphicsView {
 
 		renderString(50, 50, "Pitch: " + model.getPitchString());
 		renderString(50, 75, "Volume: " + roundedFloat(model.getVolume()));
-		renderString(50, 25, "Recording: " + model.isRecording());
+		
+		// render recording / playing icons (if applicable)
+		if(model.isRecording()) {
+			renderTexture(record, 50, 25);
+		}
+		if(model.isPlayback()) {
+			renderTexture(play, 75, 25);
+		}
 	}
 	
 	private void renderTexture(Texture tex, float topLeftX, float topLeftY) {

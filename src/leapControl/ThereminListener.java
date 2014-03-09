@@ -67,23 +67,23 @@ public class ThereminListener extends Listener {
     }
 
     public void onConnect(Controller controller) {
-        System.out.println("Connected");
+        printDebug("Connected");
     }
 
     public void onDisconnect(Controller controller) {
         // Note: not dispatched when running in a debugger.
-        System.out.println("Disconnected");
+        printDebug("Disconnected");
     }
 
     public void onExit(Controller controller) {
-        System.out.println("Exited");
+        printDebug("Exited");
     }
 
-    private static void printDebug(String message){
+    public static void printDebug(String message){
         printDebug(message, 5);
     }
     
-    private static void printDebug(String message, int dbgLevel) {
+    public static void printDebug(String message, int dbgLevel) {
         if (DEBUG >= dbgLevel) {
             System.out.println(message);
         }
@@ -254,6 +254,8 @@ public class ThereminListener extends Listener {
                         pitchConnection.sendRecordOff(FILEPLAY);
                         // stop playback
                         pitchConnection.sendPlayBackOff(FILEPLAY);
+                        graphicsModel.setPlayback(false);
+
                     } 
             	}
             	break;
@@ -271,6 +273,8 @@ public class ThereminListener extends Listener {
             			pitchConnection.sendRecordOff(FILEPLAY);
             			// turn off playback if on
             			pitchConnection.sendPlayBackOff(FILEPLAY);
+                        graphicsModel.setPlayback(false);
+
             			try {
             			    /* This sleep is here to ensure that the two files are closed by
             			     * Puredata before we try to delete/ copy over them.
@@ -281,7 +285,7 @@ public class ThereminListener extends Listener {
                         }
             			// copy recording to secondary file
             			if (!moveRecording()){
-            				System.out.println("MOVE NOT WORKY");
+            				printDebug("MOVE NOT WORKY");
             			}
             		}
             	}
@@ -294,7 +298,7 @@ public class ThereminListener extends Listener {
             		graphicsModel.flipPlayback();
             		if (graphicsModel.isPlayback()){
                         pitchConnection.sendPlayBackOn(FILEPLAY);
-                        System.out.println("PLAYBACK ON");
+                        printDebug("PLAYBACK ON");
             		} else {
                         pitchConnection.sendPlayBackOff(FILEPLAY);
             		}
@@ -342,7 +346,7 @@ public class ThereminListener extends Listener {
     private boolean moveRecording(){
     	String url = this.getClass().getResource("").getPath();
 
-		System.out.println(url);
+		printDebug(url);
 		
 		String newurl = url + "../../pd_src/";
 		
@@ -351,16 +355,16 @@ public class ThereminListener extends Listener {
 		try{
 			File newfile = new File(newurl + "playback.wav");
 			if(newfile.exists() && newfile.delete()){
-				System.out.println("File was deleted");
+				printDebug("File was deleted");
 			} else {
-				System.out.println("File is failed to delete!");
+				printDebug("File is failed to delete!");
 			}
 			
 			
 			if(file.renameTo(newfile)){
-	    		System.out.println("File is moved successful!");
+	    		printDebug("File is moved successful!");
 			}else{
-	    		System.out.println("File is failed to move!");
+	    		printDebug("File is failed to move!");
 	    	}
 	 
 	    }catch(Exception e){
