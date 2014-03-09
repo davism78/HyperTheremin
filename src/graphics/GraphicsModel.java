@@ -23,6 +23,7 @@ public class GraphicsModel {
 	
 	// Recording
     private boolean recording;
+    private boolean playback;
 	
 	public GraphicsModel() {
 		tuningData = new TuningData();
@@ -171,4 +172,20 @@ public class GraphicsModel {
 	public void flipRecording() {
 		recording = !recording;
 	}
+	
+	/******************************************
+     * Playback methods
+     ******************************************/
+    
+    public boolean isPlayback() {
+        return recording;
+    }
+    
+    public void setPlayback(boolean playback) {
+        this.playback = playback;
+    }
+    
+    public void flipPlayback() {
+        playback = !playback;
+    }
 }

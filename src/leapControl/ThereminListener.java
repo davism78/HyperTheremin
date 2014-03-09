@@ -106,7 +106,7 @@ public class ThereminListener extends Listener {
      * function would be to base tone on closest point on the entire hand
      */
     private double getTone(Hand hand/* FingerList fingers */) {
-    	FingerList figs;
+    	FingerList figs = null;
         if (hand == null || (figs = hand.fingers()) == null || figs.isEmpty()){
         	deadPitchFrames++;
             // if we get here, there is no pitch hand in the frame
@@ -122,14 +122,10 @@ public class ThereminListener extends Listener {
         }
 
         deadPitchFrames = 0;
+        assert(figs != null);
         
-        float max = hand.fingers().get(0).tipPosition().getX();
-        for (Finger finger : hand.fingers()) {
-            float v = finger.tipPosition().getX();
-            if (v > max) {
-                max = v;
-            }
-        }
+        // take the right finger (closest to antennae)
+        float max = figs.rightmost().tipPosition().getX();
 
         // Finds the distance of the finger from the "antennae"
         double position = Math.abs(ANTENNAE - (double) max);
@@ -139,11 +135,7 @@ public class ThereminListener extends Listener {
         // ANTENNAE
         // SCALE is used to tune the pitch scale
         double tone = MAXFREQ * Math.pow(.5, position / graphicsModel.getScale());
-
-        // limit the pitch
-        if (tone > MAXFREQ) {
-            tone = MAXFREQ;
-        }
+        assert(position > 0 && tone <= MAXFREQ);
 
         if(GraphicsUtils.QUANTIZED) {
         	tone = quantizeTone(tone);
@@ -166,7 +158,7 @@ public class ThereminListener extends Listener {
      * scaling, this will be hardcoded
      */
     private double getLevel(Hand hand) {
-    	FingerList figs;
+    	FingerList figs = null;
     	
         // if we get here, there is no level hand in the frame
         if (hand == null || (figs = hand.fingers()) == null || figs.isEmpty()){
@@ -180,15 +172,16 @@ public class ThereminListener extends Listener {
         		graphicsModel.setVolume(0.0);
             	return 0;
         	}
-        
         }
 
         deadLevelFrames = 0;
-        Vector v = hand.fingers().get(0).tipPosition();
-        float Yval = v.getY();
+        assert(figs != null);
+        
+        float Yval = figs.get(0).tipPosition().getY();
         if(Yval > 660) {
         	Yval = 660;
-        } else if( Yval < OFFSET) {
+        	//FIXME: Hardcoded image dimension!!!
+        } else if(Yval < OFFSET) {
         	Yval = (float) (OFFSET + 1);
         }
         printDebug("Y VAL: " + Yval);
@@ -297,8 +290,13 @@ public class ThereminListener extends Listener {
             	// if we are in the menu, transfer to selected menu state
             	if(oldmode == MENU) {
             		graphicsModel.setMode(graphicsModel.getMenuData().getSelectedState());
-            	} else if (oldmode == PLAY){
-            		pitchConnection.sendPlayBackOn(FILEPLAY);
+            	} else if (oldmode == PLAY){ // if we are in Play mode, flip playback
+            		graphicsModel.flipPlayback();
+            		if (graphicsModel.isPlayback()){
+                        pitchConnection.sendPlayBackOn(FILEPLAY);
+            		} else {
+                        pitchConnection.sendPlayBackOff(FILEPLAY);
+            		}
             	}
             	break;
             default:
