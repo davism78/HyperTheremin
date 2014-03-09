@@ -294,6 +294,7 @@ public class ThereminListener extends Listener {
             		graphicsModel.flipPlayback();
             		if (graphicsModel.isPlayback()){
                         pitchConnection.sendPlayBackOn(FILEPLAY);
+                        System.out.println("PLAYBACK ON");
             		} else {
                         pitchConnection.sendPlayBackOff(FILEPLAY);
             		}
