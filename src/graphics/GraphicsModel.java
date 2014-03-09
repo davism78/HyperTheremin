@@ -5,6 +5,7 @@ import java.util.Collections;
 import leapControl.HandData;
 import leapControl.ThereminListener;
 
+import org.lwjgl.opengl.Display;
 import org.newdawn.slick.TrueTypeFont;
 public class GraphicsModel {
 	
@@ -104,15 +105,22 @@ public class GraphicsModel {
 	 ***********************************************/
 	
 	public double getPitchPosition() {
+		int width = Display.getWidth();
+		double ant = width * GraphicsUtils.PITCH_ANT_RATIO;
+		
+		// FIXME parameterize leap constants
 		// convert pitch HandData to pixel value.
-		double slope = 290.0 / 350.0;
-		return slope * pitchHand.getPos() + 370.0; 
+		double slope = (ant - width / 2.0) / 350.0;
+		return slope * pitchHand.getPos() + (width / 2.0); 
 	}
 	
 	public double getVolumePosition() {
+		int height = Display.getHeight();
+		double ant = height * GraphicsUtils.LEVEL_ANT_RATIO;
+		
 		// convert volume HandData to pixel value.
-		double slope = -480.0 / 575.0;
-		return slope * (levelHand.getPos() - 600.0);
+		double slope = (-1 * ant) / 575.0;
+		return slope * (levelHand.getPos() - height);
 	}
 	
 	public double pitchToMilli(double pitch) {

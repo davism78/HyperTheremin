@@ -20,6 +20,9 @@ public class GraphicsUtils {
 	public static final boolean QUANTIZED = false;
 	public static final String DEFAULT_RECORD_FILE = "sample.theremin";
 	public static final boolean RECORD = false;
+	// the ratio to find antennae locations relative to image width
+	public static final double PITCH_ANT_RATIO = (660.0 / 740.0);
+	public static final double LEVEL_ANT_RATIO = (480.0 / 600.0);
 
 	public static final List<Double> notes;
 	public static final String[] noteNames;

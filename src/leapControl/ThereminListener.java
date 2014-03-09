@@ -241,7 +241,7 @@ public class ThereminListener extends Listener {
 
             	// Get the CircleGesture and check if a circle has been made
             	CircleGesture circleGest = new CircleGesture(gest);
-            	if (circleGest.progress() > 1.0){
+            	if (circleGest.progress() > 2.0){
             		// Switch to menu.
             		graphicsModel.setMode(MENU);
                 	
@@ -277,7 +277,7 @@ public class ThereminListener extends Listener {
             			     */
                             Thread.sleep(50);
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            /* ignore */
                         }
             			// copy recording to secondary file
             			if (!moveRecording()){
@@ -531,6 +531,10 @@ public class ThereminListener extends Listener {
 	public void cleanup() {
 		recorder.cleanup();
 		reader.cleanup();
+		
+		// stop recording and playback
+		pitchConnection.sendPlayBackOff(FILEPLAY);
+		pitchConnection.sendRecordOff(FILEPLAY);
 	}
 
 }
