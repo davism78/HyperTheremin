@@ -1,0 +1,10 @@
+C0=16.352
+Width=900
+Height=730
+Title=Theremin
+DefaultVal=0.0
+Quantized=false
+PitchRatio=0.891891891891
+LevelRatio=0.8
+Font=Monaco
+FontSize=24

@@ -35,7 +35,7 @@ public class GraphicsModel {
 
 		// default to menu mode
 		currentMode = ThereminMode.MENU;
-		recording = GraphicsUtils.RECORD;
+		recording = false;
 		playback = false;  // playback is off by default
 		
 	}

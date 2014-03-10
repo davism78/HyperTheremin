@@ -50,16 +50,10 @@ public class ThereminListener extends Listener {
 
     private OSCConnection pitchConnection;
     private GraphicsModel graphicsModel;
-    
-    // default file to record to
-    private MusicRecorder recorder;
-    private MusicReader reader;
 
     public ThereminListener(GraphicsModel model) {
         this.graphicsModel = model;
         this.graphicsModel.setScale(DEFAULT_SCALE); // default initial value
-        this.recorder = new MusicRecorder(GraphicsUtils.DEFAULT_RECORD_FILE);
-        this.reader = new MusicReader(GraphicsUtils.DEFAULT_RECORD_FILE);
     }
 
     public void onInit(Controller controller) {
@@ -330,8 +324,6 @@ public class ThereminListener extends Listener {
         	doMenuMode(frame);
         	break;
         case PLAYBACK:
-        	// TODO: remove this
-        	doPlayback();
         	break;
         case EXIT:
         	Theremin.exit();
@@ -426,13 +418,6 @@ public class ThereminListener extends Listener {
             printDebug("ERROR: message did not send");
         }
         
-        /*
-         * 4. If the audio is to be recorded, record it.
-         */
-        if(graphicsModel.isRecording() && level > 0.0) {
-        	recorder.record(tone, level);
-        }
-        
     }
     
     private double quantizeTone(double tone) {
@@ -503,39 +488,8 @@ public class ThereminListener extends Listener {
     	graphicsModel.getMenuData().updateMainMenu(fingerPos.getX(), fingerPos.getY());
     	
     }
-    
-	private void doPlayback() {
-		if(reader.next()) {
-			double tone = reader.getPitch();
-			double level = reader.getVolume();
-			/*
-			 * Update graphics
-			 */
-			graphicsModel.setPitch(tone);
-			graphicsModel.setVolume(level);
-			
-			HandData pitchData = new HandData(tone, graphicsModel.pitchToMilli(tone));
-	        graphicsModel.setRightHand(pitchData); 
-	        HandData volData = new HandData(level, graphicsModel.volumeToMilli(level));
-	        graphicsModel.setLeftHand(volData);
-	        
-			/*
-			 * Send data to OSC
-			 */
-			boolean pitchSent = pitchConnection.sendPitch(tone, level);
-	        if (!pitchSent) {
-	            printDebug("ERROR: message did not send");
-	        }
-		} else {
-			// restart (loop playback)
-			reader.restart();
-		}
-	}
 	
 	public void cleanup() {
-		recorder.cleanup();
-		reader.cleanup();
-		
 		// stop recording and playback
 		pitchConnection.sendPlayBackOff(FILEPLAY);
 		pitchConnection.sendRecordOff(FILEPLAY);
