@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Properties;
 
 import leapControl.ThereminListener;
+import main.Theremin;
 
 import org.newdawn.slick.TrueTypeFont;
 
@@ -34,7 +35,12 @@ public class GraphicsUtils {
 	
 	public static final int FONT_SIZE;
 	private static final String FONT;
-
+	
+	private static final String OS;
+	private static final String PDSRC; // theremin.pd location
+	private static final String PDEXE; // pd.exe location
+	public static final String PD_EXEC; // String for execution
+	
 	public static final List<Double> notes;
 	public static final String[] noteNames;
 
@@ -54,21 +60,41 @@ public class GraphicsUtils {
 		LEVEL_ANT_RATIO = Double.valueOf(appProps.getProperty("LevelRatio"));
 		FONT_SIZE = Integer.valueOf(appProps.getProperty("FontSize"));
 		FONT = appProps.getProperty("Font");
-		/*System.out.println("Properties loaded and constants updated");
-		System.out.println("C0: " + C0);
-		System.out.println("WIDTH: " + DEFAULT_WIDTH);
-		System.out.println("HEIGHT: " + DEFAULT_HEIGHT);
-		System.out.println("TITLE: " + TITLE);
-		System.out.println("DEFAULT_VAL: " + DEFAULT_VAL);
-		System.out.println("QUANTIZED: " + QUANTIZED);
-		System.out.println("PITCH_ANT_RATIO: " + PITCH_ANT_RATIO);
-		System.out.println("LEVEL_ANT_RATIO: " + LEVEL_ANT_RATIO);
-		System.out.println("FONT_SIZE: " + FONT_SIZE);
-		System.out.println("FONT: " + FONT);*/
+		OS = appProps.getProperty("OS");
+		PDSRC = appProps.getProperty("PdSrc");
+		PDEXE = appProps.getProperty("PdExe");
 		
-		//
+		/*
+		 * Setup the puredata execution script
+		 */
+		String execScript = getExecScript();
+		PD_EXEC = execScript;
+		
+		debugConsts();
+		
 		notes = setupNotes();
 		noteNames =	setupNoteNames();
+	}
+
+	private static String getExecScript() {
+		String url = Theremin.class.getResource("").getPath();
+		String pdsrcurl = "";
+		String pdurl = "";
+		if(OS.equalsIgnoreCase("Windows")) {
+			pdsrcurl = url.substring(1) + PDSRC;
+			pdurl = url + PDEXE;
+		} else {
+			pdsrcurl = url + PDSRC;
+			pdurl = url + PDEXE;
+		}
+		
+		String execScript = "";
+		if(OS.equalsIgnoreCase("Mac")) {
+			execScript = "open -a " + pdurl + " " + pdsrcurl;
+		} else {
+			execScript = pdurl + " " + pdsrcurl;
+		}
+		return execScript;
 	}
 
 	private static void loadProps() {
@@ -127,6 +153,26 @@ public class GraphicsUtils {
 		}
 		return font;
 	}
+	
+	/**************************************************************
+	 * Debug
+	 **************************************************************/
+
+	private static void debugConsts() {
+		printDebug("Properties loaded and constants updated");
+		printDebug("C0: " + C0);
+		printDebug("WIDTH: " + DEFAULT_WIDTH);
+		printDebug("HEIGHT: " + DEFAULT_HEIGHT);
+		printDebug("TITLE: " + TITLE);
+		printDebug("DEFAULT_VAL: " + DEFAULT_VAL);
+		printDebug("QUANTIZED: " + QUANTIZED);
+		printDebug("PITCH_ANT_RATIO: " + PITCH_ANT_RATIO);
+		printDebug("LEVEL_ANT_RATIO: " + LEVEL_ANT_RATIO);
+		printDebug("FONT_SIZE: " + FONT_SIZE);
+		printDebug("FONT: " + FONT);
+		printDebug("EXEC: " + PD_EXEC);
+	}
+
 	
 	public static void printDebug(String message){
         printDebug(message, 5);

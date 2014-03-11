@@ -27,9 +27,6 @@ import java.io.File;
 public class ThereminListener extends Listener {
     private static final double DEFAULT_SCALE = 100.0;
 
-	// make this higher for more info
-    public static final int DEBUG = 0;
-
     public static final double OFFSET = 25.0; // Leap motion min sensitivity
     public static final double MAXFREQ = 2000.0; // freq when touching
                                                    // antennae
@@ -78,9 +75,7 @@ public class ThereminListener extends Listener {
     }
     
     public static void printDebug(String message, int dbgLevel) {
-        if (DEBUG >= dbgLevel) {
-            System.out.println(message);
-        }
+        GraphicsUtils.printDebug(message, dbgLevel);
     }
 
     public void setPitchScale(double scale) {

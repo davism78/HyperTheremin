@@ -1,6 +1,7 @@
 package main;
 
 import graphics.GraphicsModel;
+import graphics.GraphicsUtils;
 import graphics.GraphicsView;
 
 import java.io.IOException;
@@ -23,11 +24,12 @@ public class Theremin {
 	private static Process PDSubprocess;
 	
 	public static void main(String[] args) throws LWJGLException {
+		launchPuredata();
+
 		// Setup the display
 		GraphicsModel graphics = new GraphicsModel();
 		gui = new GraphicsView(graphics);
 		
-		//launchPuredata();
 		
 		// Create a theremin listener and controller
 		listener = new ThereminListener(graphics);
@@ -54,15 +56,8 @@ public class Theremin {
 		// we can use java.io.runtime:
 		Runtime rt = Runtime.getRuntime();
 		
-		String url = Theremin.class.getResource("").getPath();
-
-		System.out.println(url);
-		
-		String pdsrcurl = url.substring(1) + "..\\..\\pd_src\\theremin.pd";
-		String pdurl = url + "../../../../WindowsFolders/Pd-0.43.4-extended-windowsxp-i386/Pd-0.43.4-extended/bin/pd.exe";
-		
 		try {
-			PDSubprocess = rt.exec(pdurl + " " + pdsrcurl);
+			PDSubprocess = rt.exec(GraphicsUtils.PD_EXEC);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
