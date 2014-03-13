@@ -154,7 +154,7 @@ public class GraphicsView {
 		GL11.glColor3f(0, 0, 0);
 		// Draw horizontal line
 		renderLine(0, Display.getHeight() / 2, Display.getWidth(), Display.getHeight() / 2);
-		renderLine(Display.getWidth() / 2, 0, Display.getWidth() / 2, Display.getHeight());
+		renderLine(Display.getWidth() / 2, Display.getHeight() / 2, Display.getWidth() / 2, Display.getHeight());
 		/*renderLine(0, model.getMenuData().windowLineY, Display.getWidth(), model.getMenuData().windowLineY);
 		renderLine(model.getMenuData().windowLineX, 0, model.getMenuData().windowLineY, Display.getHeight());*/
 		
@@ -169,24 +169,17 @@ public class GraphicsView {
 		GL11.glColor3f(0, 0, 0);
 		if(model.getMenuData().getSelectedState() == ThereminMode.PLAY) {
 			GL11.glColor3f(1, 1, 1);
-			renderString(offset, h / 4 - GraphicsUtils.FONT_SIZE, "Play Selected");
+			renderString(w / 2 - offset, h / 4 - GraphicsUtils.FONT_SIZE, "Play Selected");
 			GL11.glColor3f(0, 0, 0);
 		} else {
-			renderString(offset, h / 4 - GraphicsUtils.FONT_SIZE, "Play");
+			renderString(w / 2 - offset, h / 4 - GraphicsUtils.FONT_SIZE, "Play");
 		}
 		if(model.getMenuData().getSelectedState() == ThereminMode.TUNE) {
 			GL11.glColor3f(1, 1, 1);
-			renderString(offset + w / 2, h / 4 - GraphicsUtils.FONT_SIZE, "Tune Selected");
+			renderString(offset, 3 * h / 4 - GraphicsUtils.FONT_SIZE, "Tune Selected");
 			GL11.glColor3f(0, 0, 0);
 		} else {
-			renderString(offset + w / 2, h / 4 - GraphicsUtils.FONT_SIZE, "Tune");
-		}
-		if(model.getMenuData().getSelectedState() == ThereminMode.PLAYBACK) { // SETTINGS
-			GL11.glColor3f(1, 1, 1);
-			renderString(offset, 3 * h / 4 - GraphicsUtils.FONT_SIZE, "Playback Selected"/*"Settings Selected"*/);
-			GL11.glColor3f(0, 0, 0);
-		} else {
-			renderString(offset, 3 * h / 4 - GraphicsUtils.FONT_SIZE, "Playback"/*"Settings"*/);
+			renderString(offset, 3 * h / 4 - GraphicsUtils.FONT_SIZE, "Tune");
 		}
 		if(model.getMenuData().getSelectedState() == ThereminMode.EXIT) {
 			GL11.glColor3f(1, 1, 1);

@@ -71,7 +71,8 @@ public class Theremin {
 		
 		if (PDSubprocess != null){
 			try {
-				PDSubprocess.exitValue();
+				int eVal = PDSubprocess.exitValue();
+				System.out.println("PD exited with " + eVal);
 			} catch (IllegalThreadStateException e) {
 				PDSubprocess.destroy();
 				System.out.println("PD destroyed");

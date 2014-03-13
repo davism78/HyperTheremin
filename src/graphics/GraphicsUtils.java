@@ -68,7 +68,7 @@ public class GraphicsUtils {
 		 * Setup the puredata execution script
 		 */
 		String execScript = getExecScript();
-		PD_EXEC = execScript;
+		PD_EXEC = "" + execScript;
 		
 		debugConsts();
 		
@@ -88,12 +88,7 @@ public class GraphicsUtils {
 			pdurl = url + PDEXE;
 		}
 		
-		String execScript = "";
-		if(OS.equalsIgnoreCase("Mac")) {
-			execScript = "open -a " + pdurl + " " + pdsrcurl;
-		} else {
-			execScript = pdurl + " " + pdsrcurl;
-		}
+		String execScript = pdurl + " " + pdsrcurl;
 		return execScript;
 	}
 

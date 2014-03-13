@@ -342,16 +342,16 @@ public class ThereminListener extends Listener {
 		try{
 			File newfile = new File(newurl + "playback.wav");
 			if(newfile.exists() && newfile.delete()){
-				printDebug("File was deleted");
+				printDebug("File was deleted", 0);
 			} else {
-				printDebug("File is failed to delete!");
+				printDebug("File is failed to delete!", 0);
 			}
 			
 			
 			if(file.renameTo(newfile)){
-	    		printDebug("File is moved successful!");
+	    		printDebug("File is moved successful!", 0);
 			}else{
-	    		printDebug("File is failed to move!");
+	    		printDebug("File is failed to move!", 0);
 	    	}
 	 
 	    }catch(Exception e){
