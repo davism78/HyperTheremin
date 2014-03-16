@@ -241,8 +241,6 @@
 #X obj 660 32 dsp;
 #X text 682 1 DSP on/off;
 #X text 676 -53 there - now it's different;
-#X msg 538 2 open playback.wav;
-#X obj 538 26 writesf~;
 #X obj 462 64 udpreceive 8000;
 #X msg 130 234 connect localhost 8000;
 #X connect 0 0 3 0;
@@ -285,7 +283,6 @@
 #X connect 30 0 31 0;
 #X connect 31 0 11 0;
 #X connect 33 0 25 1;
-#X connect 33 1 25 1;
 #X connect 33 2 35 0;
 #X connect 34 0 22 0;
 #X connect 35 0 33 0;
@@ -295,8 +292,6 @@
 #X connect 43 0 42 1;
 #X connect 44 0 25 0;
 #X connect 45 0 46 0;
-#X connect 45 0 50 0;
 #X connect 46 0 47 0;
-#X connect 50 0 51 0;
-#X connect 52 0 0 0;
-#X connect 53 0 10 0;
+#X connect 50 0 0 0;
+#X connect 51 0 10 0;
