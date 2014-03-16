@@ -9,5 +9,5 @@ LevelRatio=0.8
 Font=Monaco
 FontSize=24
 OS=Windows
-PdSrc=../theremin.pd
+PdSrc=../../pd_src/theremin.pd
 PdExe=../../../../WindowsFolders/Pd-0.43.4-extended-windowsxp-i386/Pd-0.43.4-extended/bin/pd.exe

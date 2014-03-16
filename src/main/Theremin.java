@@ -59,8 +59,7 @@ public class Theremin {
 		try {
 			PDSubprocess = rt.exec(GraphicsUtils.PD_EXEC);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			GraphicsUtils.printDebug("Failed to open PureData automatically", -1);
 		}
 	}
 

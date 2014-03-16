@@ -91,8 +91,6 @@ public class ThereminListener extends Listener {
      * 
      * The pitch returned will always be <= 18000
      * 
-     * TODO: this method doesn't work well with multiple fingers. desired
-     * function would be to base tone on closest point on the entire hand
      */
     private double getTone(Hand hand/* FingerList fingers */) {
     	FingerList figs = null;
@@ -143,7 +141,6 @@ public class ThereminListener extends Listener {
      * 
      * The level returned will be <= 100
      * 
-     * TODO filter out crackling when changing level TODO fine tune volume
      * scaling, this will be hardcoded
      */
     private double getLevel(Hand hand) {
@@ -169,7 +166,6 @@ public class ThereminListener extends Listener {
         float Yval = figs.get(0).tipPosition().getY();
         if(Yval > 660) { // this is max leap motion Y sensitivity
         	Yval = 660;
-        	//FIXME: Hardcoded image dimension!!!
         } else if(Yval < OFFSET) {
         	Yval = (float) (OFFSET + 1);
         }
@@ -218,7 +214,7 @@ public class ThereminListener extends Listener {
 
         // FIXME: We dont know if there will only be one gesture!!!
         GestureList gests = frame.gestures();
-        assert(gests.count() <= 1);
+        //assert(gests.count() <= 1);
         
         if (gests.count() > 0){
             
@@ -286,8 +282,12 @@ public class ThereminListener extends Listener {
             	} else if (oldmode == PLAY){ // if we are in Play mode, flip playback
             		graphicsModel.flipPlayback();
             		if (graphicsModel.isPlayback()){
-                        pitchConnection.sendPlayBackOn(FILEPLAY);
-                        printDebug("PLAYBACK ON");
+            			// check for playback file first!
+            			if (checkFile(FILEPLAY)){
+            				// send playback signal
+            				pitchConnection.sendPlayBackOn(FILEPLAY);
+            				printDebug("PLAYBACK ON");
+            			}
             		} else {
                         pitchConnection.sendPlayBackOff(FILEPLAY);
             		}
@@ -337,10 +337,10 @@ public class ThereminListener extends Listener {
 		
 		String newurl = url + "../../pd_src/";
 		
-		File file = new File(newurl + "recording.wav");
+		File file = new File(newurl + FILERECORD);
 		
 		try{
-			File newfile = new File(newurl + "playback.wav");
+			File newfile = new File(newurl + FILEPLAY);
 			if(newfile.exists() && newfile.delete()){
 				printDebug("File was deleted", 0);
 			} else {
@@ -359,7 +359,17 @@ public class ThereminListener extends Listener {
 	   	}
 		return true;
     }
-
+    
+    /*
+     * check for the supplied filename
+     */
+    private boolean checkFile(String filename){
+    	String url = this.getClass().getResource("").getPath();
+    	String newurl = url + "../../pd_src/";
+    	File newfile = new File(newurl + filename);
+    	return newfile.exists();
+    }
+    
 	/*
      * This method handles all behavior for the main play state of the theremin.
      * 1. evaluate number of hands and their functions
@@ -454,7 +464,6 @@ public class ThereminListener extends Listener {
                 // now calculate the difference between tips
                 // this is multiplied by 1.5 to make the scale range 
                 // from 30 to 225
-                // TODO: should this look at more than one axis?
                 double octave = 1.5 * Math.abs(leftpos - rightpos);
                 
                 /*
@@ -468,11 +477,6 @@ public class ThereminListener extends Listener {
         }
     }
     
-    
-    /*
-     * TODO: we are moving to puredata based recording, this method and the PLAYBACK mode
-     * enum will not be used
-     */
     /*
      * Defines the behavior of the MainMenu
      * 1. get x,y position of hand

@@ -207,7 +207,7 @@ public class GraphicsView {
 		renderTexture(this.rightFinger, rightFinger, 250);
 		
 		
-		renderString(50, 50, "Tuning Scale: " + scale);
+		renderString(50, 50, "Tuning Scale: " + (int) scale);
 	}
 
 	private void renderPlay() {
